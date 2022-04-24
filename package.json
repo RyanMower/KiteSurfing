@@ -1,0 +1,24 @@
+{
+  "name": "kitesurfing",
+  "version": "1.0.0",
+  "description": "KiteSurfing Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanMower/KiteSurfing.git"
+  },
+  "author": "Ryan Mower",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RyanMower/KiteSurfing/issues"
+  },
+  "homepage": "https://github.com/RyanMower/KiteSurfing#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2"
+  }
+}
