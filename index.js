@@ -66,7 +66,6 @@ app.get('/login', function(req, res) {
   connection.query("SELECT * FROM users;", function(err, results) {    
     // Error Occured    
     if (err) throw err;
-    console.log(results);
   });
   res.sendFile(__dirname + '/public/login.html');
 });
@@ -76,16 +75,10 @@ app.post("/login", function(req, res) {
   // Authenticate User with Provided Credentials
   var email = req.body["email"];
   var password = req.body["password"];
-  //var sql = "SELECT * FROM tbl_accounts WHERE acc_login='" + user + "';";
-  console.log("Success - server");
-  res.json({
-    status: "success"
-  });
-  /*
+  var sql = "SELECT * FROM usrs WHERE user_email='" + email + "';";
   connection.query(sql, function(err, rows, fields) {
     // Error Occured
     if (err) {
-      res.sendStauts(500);
       res.json({
         status: 'fail'
       });
@@ -99,6 +92,10 @@ app.post("/login", function(req, res) {
         status: 'fail'
       });
     } else {
+      res.json({
+        status: "success"
+      });
+      /*
       // Checks username and password
       if (bcrypt.compareSync(password, rows[0].acc_password) &&
         rows[0].acc_login == user) {
@@ -117,9 +114,9 @@ app.post("/login", function(req, res) {
           status: 'fail'
         });
       }
+      */
     }
   });
-  */
 });
 
 

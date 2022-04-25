@@ -34,7 +34,6 @@
        $(document).ready(function () { 
          $('#login-form').submit(function (event) { 
          event.preventDefault(); 
-         console.log("HERE");
          //collect the form data using Id Selector for whatever data you need 
          //to send to server 
          let email = $('#email').val(); 
@@ -43,7 +42,6 @@
            {"email": email, "password": password}, 
              (data) => { 
                if (data.status === 'success') { 
-                 console.log("SUCCESS");
                  window.location.href = '/'; 
 	       }
                else { 
@@ -112,12 +110,5 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- SimpleLightbox plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>
