@@ -71,6 +71,58 @@ app.get('/login', function(req, res) {
   res.sendFile(__dirname + '/public/login.html');
 });
 
+// Authenticate 
+app.post("/login", function(req, res) {
+  // Authenticate User with Provided Credentials
+  var email = req.body["email"];
+  var password = req.body["password"];
+  //var sql = "SELECT * FROM tbl_accounts WHERE acc_login='" + user + "';";
+  console.log("Success - server");
+  res.json({
+    status: "success"
+  });
+  /*
+  connection.query(sql, function(err, rows, fields) {
+    // Error Occured
+    if (err) {
+      res.sendStauts(500);
+      res.json({
+        status: 'fail'
+      });
+      return;
+    }
+
+    // More than one or no users with provided 'login'
+    if (rows.length != 1) {
+      console.log("Too many, or too few users.");
+      res.json({
+        status: 'fail'
+      });
+    } else {
+      // Checks username and password
+      if (bcrypt.compareSync(password, rows[0].acc_password) &&
+        rows[0].acc_login == user) {
+
+        // Successful Authentication
+        // Create a session for user
+        req.session.value = 1;
+        req.session.login = user;
+
+        // Send success message to html for redirection
+        res.json({
+          status: "success"
+        });
+      } else { // Invalid Credentials
+        res.json({
+          status: 'fail'
+        });
+      }
+    }
+  });
+  */
+});
+
+
 
 
 // function to return the 404 message and error to client

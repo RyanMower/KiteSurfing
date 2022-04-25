@@ -17,6 +17,44 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <script>
+
+       // Displayes Error Message
+       function showFailure(){
+         var alert_elm = document.getElementById("alert-element");
+         alert_elm.classList.value = "alert alert-danger";
+         alert_elm.innerHTML = "Invalid credentials. Please try again!";
+         setTimeout(function(){
+                 alert_elm.classList.value = "";
+                 alert_elm.innerHTML = "";
+         },4000);
+       }
+
+       $(document).ready(function () { 
+         $('#login-form').submit(function (event) { 
+         event.preventDefault(); 
+         console.log("HERE");
+         //collect the form data using Id Selector for whatever data you need 
+         //to send to server 
+         let email = $('#email').val(); 
+         let password= $('#password').val(); 
+         $.post('/login', 
+           {"email": email, "password": password}, 
+             (data) => { 
+               if (data.status === 'success') { 
+                 console.log("SUCCESS");
+                 window.location.href = '/'; 
+	       }
+               else { 
+                 //Display error message 
+                 showFailure();
+               } 
+             }); 
+         }); 
+       });
+    </script>
+
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -42,6 +80,7 @@
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                     <div class="col-lg-6">
+                        <div id="alert-element"></div>
                         <form id="login-form">
                             <!-- Email address input-->
                             <div class="form-floating mb-3">
