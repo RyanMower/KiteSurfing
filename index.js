@@ -10,6 +10,10 @@ const url = require('url');
 const path = require('path');
 const bodyparser = require('body-parser');  // helps in extracting the body portion of an incoming request stream
 
+// Scripts used by index.js
+const scripts = require("./index_scripts.js");
+
+
 
 // ===== Constants ===== //
 const port = 9001;       // Port of server
@@ -67,11 +71,6 @@ app.get('/createAccount', function(req, res) {
 
 // Login page
 app.get('/login', function(req, res) {
-  // Run generated query     
-  connection.query("SELECT * FROM users;", function(err, results) {    
-    // Error Occured    
-    if (err) throw err;
-  });
   res.sendFile(__dirname + '/public/login.html');
 });
 
@@ -80,7 +79,8 @@ app.post("/login", function(req, res) {
   // Authenticate User with Provided Credentials
   var email = req.body["email"];
   var password = req.body["password"];
-  var sql = "SELECT * FROM usrs WHERE user_email='" + email + "';";
+  //var sql = "SELECT * FROM Users WHERE user_email='" + email + "';";
+  var sql = "SELECT * FROM Users;"
   connection.query(sql, function(err, rows, fields) {
     // Error Occured
     if (err) {
@@ -128,10 +128,51 @@ app.post("/login", function(req, res) {
 // Create Account 
 app.post("/createAccount", function(req, res) {
   // Authenticate User with Provided Credentials
-  console.log("TRYING TO CREATE AN ACCOUNT");
+  let email        = req.body["email"];
+  let fname        = req.body["first-name"];
+  let lname        = req.body["last-name"];
+  let phone_number = req.body["phone-number"];
+  let password1    = req.body["password1"];
+  let password2    = req.body["password2"];
+  if (!(scripts.isValidPassword(password1) && scripts.isValidPassword(password2) && (password1 == password2))){
+  /*
+    let reason;
+    if (password1 != password2){
+      reason = "Password's don't match.";
+    }
+    else{
+      reason = "Passwords don't meet criteron.";
+    }
+
+    res.json({    
+      status: 'fail',
+      reason: reason
+    });
+  */
+    res.redirect(302, "login");
+  }
+
+  // Create Account Here
+  const passwordHash = bcrypt.hashSync(password1, SALT_ROUNDS);    
+  
+  const new_user = {    
+      user_fname: fname,
+      user_lname: lname,
+      user_email: email,
+      user_phone: phone_number,
+      submission_date: new Date(),
+      user_pass_hash: passwordHash    
+  };    
+  
+  connection.query('INSERT Users SET ?', new_user, function (err, result) {    
+      if (err) {    
+          throw err;    
+      }    
+      res.redirect(302, "login");
+      console.log("Success!");    
+  });
+
 });
-
-
 
 
 // function to return the 404 message and error to client

@@ -45,30 +45,30 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                     <div class="col-lg-6">
                         <div id="alert-element"></div>
-                        <form id="login-form">
+                        <form id="login-form" method="POST" action="createAccount">
                             <!-- Email address input-->
                             <label for="email"><b>Email Address</b></label>
-                            <input class="form-control" id="email" type="email" placeholder="john@domain.com" required>
+                            <input name="email" class="form-control" id="email" type="email" placeholder="john@domain.com" required>
                             <br>
                             <!-- First Name -->
                             <label for="first-name"><b>First Name</b></label>
-                            <input class="form-control" id="first-name" type="text" placeholder="John" required>
+                            <input name="first-name" class="form-control" id="first-name" type="text" placeholder="John" required>
                             <br>
                             <!-- Last Name -->
                             <label for="last-name"><b>Last Name</b></label>
-                            <input class="form-control" id="last-name" type="text" placeholder="Doe" required>
+                            <input name="last-name" class="form-control" id="last-name" type="text" placeholder="Doe" required>
                             <br>
                             <!-- Phone Number-->
                             <label for="phone-number"><b>Phone Number</b></label>
-                            <input class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Ex. 123-456-7890" id="phone-number" type="tel" placeholder="123-456-7890" required>
+                            <input name="phone-number" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Ex. 123-456-7890" id="phone-number" type="tel" placeholder="123-456-7890" required>
                             <br>
                             <!-- Password input 1-->
                             <label for="password1">Password</label>
-                            <input class="form-control password-input" id="password1" type="password" placeholder="Password" required></textarea>
+                            <input name="password1" class="form-control password-input" id="password1" type="password" placeholder="Password" required></textarea>
                             <br>
                             <!-- Password input 2-->
                             <label for="password2">Re-type Password</label>
-                            <input class="form-control password-input" id="password2" type="password" placeholder="Password" required></textarea>
+                            <input name="password2" class="form-control password-input" id="password2" type="password" placeholder="Password" required></textarea>
                             <br>
                             <div id="info-alert-password" class="alert alert-info" hidden>
                                 Password must include:
@@ -79,8 +79,9 @@
                                     <li>Passwords must match</li>
                                 </ul>
                             </div>
+                            <div id="server-password-err" hidden></div>
                             <!-- Submit Button -->
-                            <button class="btn btn-primary"   type="submit">Create Account</button>
+                            <button class="btn btn-primary" type="submit">Create Account</button>
                         </form>
                     </div>
                 </div>

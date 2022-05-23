@@ -39,6 +39,7 @@ window.addEventListener('DOMContentLoaded', event => {
    document.getElementsByClassName("password-input")[0].addEventListener("keyup", displayPasswordRequirements)
    document.getElementsByClassName("password-input")[1].addEventListener("keyup", displayPasswordRequirements)
 });
+    
 
 
 
