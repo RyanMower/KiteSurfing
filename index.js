@@ -60,6 +60,11 @@ app.get('/index.html', function(req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+// Create Account Page 
+app.get('/createAccount', function(req, res) {
+  res.sendFile(__dirname + '/public/createAccount.html');
+});
+
 // Login page
 app.get('/login', function(req, res) {
   // Run generated query     
@@ -117,6 +122,13 @@ app.post("/login", function(req, res) {
       */
     }
   });
+});
+
+
+// Create Account 
+app.post("/createAccount", function(req, res) {
+  // Authenticate User with Provided Credentials
+  console.log("TRYING TO CREATE AN ACCOUNT");
 });
 
 
