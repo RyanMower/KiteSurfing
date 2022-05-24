@@ -69,7 +69,27 @@ app.get('/createAccount', function(req, res) {
   res.sendFile(__dirname + '/public/createAccount.html');
 });
 
-// Login page
+// Reset Password Page 
+app.get('/resetPassword', function(req, res) {
+  res.sendFile(__dirname + '/public/resetPassword.html');
+});
+
+// E-Commerce Page 
+app.get('/e-commerce', function(req, res) {
+  res.sendFile(__dirname + '/public/ecommerce.html');
+});
+
+// Surfing Locations Page 
+app.get('/surfing-locations', function(req, res) {
+  res.sendFile(__dirname + '/public/surfing-locations.html');
+});
+
+// Surfing Lessons Page
+app.get('/surfing-lessons', function(req, res) {
+  res.sendFile(__dirname + '/public/surfing-lessons.html');
+});
+
+// Login Page
 app.get('/login', function(req, res) {
   res.sendFile(__dirname + '/public/login.html');
 });
@@ -138,8 +158,7 @@ app.post("/createAccount", function(req, res) {
   /*
     let reason;
     if (password1 != password2){
-      reason = "Password's don't match.";
-    }
+      reason = "Password's don't match."; }
     else{
       reason = "Passwords don't meet criteron.";
     }
@@ -174,6 +193,21 @@ app.post("/createAccount", function(req, res) {
 
 });
 
+// Reset Password 
+app.post("/resetPassword", function(req, res) {
+  // Authenticate User with Provided Credentials
+  let recovery_email = req.body["email"];
+  console.log(recovery_email);
+
+  // Check if email in database, if so, send email to recover password
+  connection.query('SELECT user_email FROM Users WHERE user_email=?',[recovery_email], function (err, result, fields) {    
+      if (err) {    
+          throw err;    
+      }    
+      console.log(result);    
+      res.redirect(302, "login");
+  });
+});
 
 // function to return the 404 message and error to client
 app.get('*', function(req, res) {
