@@ -88,9 +88,24 @@ app.get('/surfing-lessons', function(req, res) {
   res.sendFile(__dirname + '/public/surfing-lessons.html');
 });
 
+// Logout Page    
+app.get("/logout", function(req, res) {    
+    if (!req.session.value) {                                                                                                                                            
+        console.log("Not logged in, can not logout.");    
+    } else {    
+        req.session.destroy();    
+    }
+    res.redirect(302, "/login");
+});
+
 // Login Page
 app.get('/login', function(req, res) {
-  res.sendFile(__dirname + '/public/login.html');
+    if (req.session.value){
+        res.redirect(302, "/");
+    }
+    else{
+        res.sendFile(__dirname + '/public/login.html');
+    }
 });
 
 // Authenticate 
