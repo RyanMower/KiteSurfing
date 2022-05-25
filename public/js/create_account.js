@@ -22,8 +22,8 @@ function isValidPassword(password){
 }
 
 function displayPasswordRequirements(){
-    let password1 = document.getElementById("password1").value;
-    let password2 = document.getElementById("password2").value;
+    let password1 = document.getElementsByClassName("password-input")[0].value;
+    let password2 = document.getElementsByClassName("password-input")[1].value;
     let password1_okay = isValidPassword(password1);
     let password2_okay = isValidPassword(password2);
     let info_alert_password = document.getElementById("info-alert-password");

@@ -1,3 +1,10 @@
+// ===== Globals ======
+const DOMAIN = "http://localhost";
+const PORT  = 9001;
+
+const nodemailer = require("nodemailer");
+const fs = require('fs');
+
 module.exports = {
     isValidPassword: function (password){
         let symbol_used = false;
@@ -19,8 +26,44 @@ module.exports = {
             }
         }
         return (number_used && symbol_used);
-    }
+    },
+    // Send Email 
+    // Idea taken from: https://www.tutsmake.com/forgot-reset-password-in-node-js-express-mysql/ 
+
+    sendEmail: function sendEmail(email, token) {
+ 
+    var email = email;
+    var token = token;
+ 
+    var raw_data = fs.readFileSync("./configs/secrets.json");
+    json_config = JSON.parse(raw_data);
+    console.log("Email: " + json_config["email"]["email"]);
+    var mail = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: json_config["email"]["email"],   // Your email id
+            pass: json_config["email"]["password"] // Your password
+        }
+    });
+    let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>';
+    console.log(html);
+    var mailOptions = {
+        from: 'kitesurft@gmail.com',
+        to: email,
+        subject: 'Reset Password Link - KiteSurf.com',
+        html: '<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>'
+    };
+ 
+    mail.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log("Email Success");
+        }
+    });
+}
 };
+
 
 
 
