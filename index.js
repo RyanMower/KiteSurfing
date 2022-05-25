@@ -17,39 +17,38 @@ const scripts = require("./index_scripts.js");
 
 // ===== Constants ===== //
 const port = 9001;       // Port of server
-const SALT_ROUNDS = 10;  // How many rounds of hashing password
 const app = express();   // Create an express application
 
 
 // ===== Middleware =====
-app.use(bodyparser.urlencoded({extended: true})); // apply the body-parser middleware to all incoming requests
-app.use(bodyparser.json()); 
-app.use(express.static(path.join(__dirname, "public"))); // middle ware to serve static files
-app.listen(port, () => console.log('Listening on port', port)); // server listens on port set to value above for incoming connections
-console.log("http://localhost:" + port);
 
 var json_config;
 var connection;
 // Reads in Express Configs and Connects to MySQL database
-fs.readFile("./configs/secrets.json", function(err, data){
-  if (err) throw err;
-  json_config = JSON.parse(data);
-  app.use(session({
-    secret: json_config["express_key"],
-    saveUninitialized: true,
-    //cookie: { maxAge: oneDay },
-    resave: false
-  }));
+var raw_data = fs.readFileSync("./configs/secrets.json");
+json_config = JSON.parse(raw_data);
 
-  // Connect to MySQL Database
-  connection = mysql.createPool({
-    host:     json_config["dbconfig"]["host"],
-    user:     json_config["dbconfig"]["user"],
-    password: json_config["dbconfig"]["password"],
-    database: json_config["dbconfig"]["database"],
-    port:     parseInt(json_config["dbconfig"]["port"])
-  });
+app.use(session({
+  secret: json_config["express_key"],
+  saveUninitialized: true,
+  //cookie: { maxAge: oneDay },
+  resave: false
+}));
+
+// Connect to MySQL Database
+connection = mysql.createPool({
+  host:     json_config["dbconfig"]["host"],
+  user:     json_config["dbconfig"]["user"],
+  password: json_config["dbconfig"]["password"],
+  database: json_config["dbconfig"]["database"],
+  port:     parseInt(json_config["dbconfig"]["port"])
 });
+
+app.use(bodyparser.json()); 
+app.use(bodyparser.urlencoded({extended: true})); // apply the body-parser middleware to all incoming requests
+app.use(express.static(path.join(__dirname, "public"))); // middle ware to serve static files
+app.listen(port, () => console.log('Listening on port', port)); // server listens on port set to value above for incoming connections
+console.log("http://localhost:" + port);
 
 
 
@@ -99,9 +98,8 @@ app.post("/login", function(req, res) {
   // Authenticate User with Provided Credentials
   var email = req.body["email"];
   var password = req.body["password"];
-  //var sql = "SELECT * FROM Users WHERE user_email='" + email + "';";
-  var sql = "SELECT * FROM Users;"
-  connection.query(sql, function(err, rows, fields) {
+  var sql = "SELECT * FROM Users WHERE user_email=?;";
+  connection.query(sql, [email], function(err, rows, fields) {
     // Error Occured
     if (err) {
       res.json({
@@ -117,18 +115,15 @@ app.post("/login", function(req, res) {
         status: 'fail'
       });
     } else {
-      res.json({
-        status: "success"
-      });
-      /*
       // Checks username and password
-      if (bcrypt.compareSync(password, rows[0].acc_password) &&
-        rows[0].acc_login == user) {
+      if (bcrypt.compareSync(password, rows[0].user_pass_hash) &&
+        rows[0].user_email == email) {
 
         // Successful Authentication
         // Create a session for user
         req.session.value = 1;
-        req.session.login = user;
+        req.session.email = email;
+        req.session.name  = rows[0].user_fname;
 
         // Send success message to html for redirection
         res.json({
@@ -139,7 +134,6 @@ app.post("/login", function(req, res) {
           status: 'fail'
         });
       }
-      */
     }
   });
 });
@@ -171,26 +165,35 @@ app.post("/createAccount", function(req, res) {
     res.redirect(302, "login");
   }
 
-  // Create Account Here
-  const passwordHash = bcrypt.hashSync(password1, SALT_ROUNDS);    
-  
-  const new_user = {    
-      user_fname: fname,
-      user_lname: lname,
-      user_email: email,
-      user_phone: phone_number,
-      submission_date: new Date(),
-      user_pass_hash: passwordHash    
-  };    
-  
-  connection.query('INSERT Users SET ?', new_user, function (err, result) {    
-      if (err) {    
-          throw err;    
-      }    
-      res.redirect(302, "login");
-      console.log("Success!");    
-  });
+  // Make sure email not attached to existing account
+  connection.query('SELECT * FROM Users WHERE user_email=?;', [email], function (err, results, fields) {    
+    if (err) {    
+      throw err;    
+    }    
 
+    if (results.length == 0){
+        // Create Account Here
+        let salt_rounds = 10;
+        const passwordHash = bcrypt.hashSync(password1, salt_rounds);    
+        const new_user = {    
+            user_fname: fname,
+            user_lname: lname,
+            user_email: email,
+            user_phone: phone_number,
+            submission_date: new Date(),
+            user_pass_hash: passwordHash    
+        };    
+        connection.query('INSERT Users SET ?;', new_user, function (err, result) {    
+            if (err) {    
+                throw err;    
+            }    
+            res.redirect(302, "login");
+        });
+    }
+    else{// Email already already used
+      res.redirect(302, "resetPassword");
+    }
+  });
 });
 
 // Reset Password 
