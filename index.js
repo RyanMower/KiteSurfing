@@ -199,7 +199,6 @@ app.post("/createAccount", function(req, res) {
             reason += "<li>Email does not meet criteron.</li>";
         }
         if (!fname_ok){
-            console.log("HRE");
             reason += "<li>First name must be alphanumeric.</li>";
         }
         if (!lname_ok){
@@ -251,7 +250,9 @@ app.post("/createAccount", function(req, res) {
 app.get('/resetPassword', function(req, res) {
     // Responding from email
     console.log(req.query.token)
-    if (req.query.token){
+
+    // SQL Validation
+    if (req.query.token && scripts.validateInput(req.query.token, "alpha-numeric")){
         connection.query('SELECT * FROM Users WHERE reset_token=?;', [req.query.token], function(err, results, fields) {
             if (err) throw err;
             console.log("LENGTH!!");
@@ -275,6 +276,13 @@ app.get('/resetPassword', function(req, res) {
 app.post("/resetPassword", function(req, res) {
     // Authenticate User with Provided Credentials
     let recovery_email = req.body["email"];
+        
+    // SQL Validation
+    if (!scripts.validateInput(recovery_email, "email")){
+        res.redirect(302, "createAccount");
+        return;
+    }
+    
 
     // Check if email in database, if so, send email to recover password
     connection.query('SELECT user_email FROM Users WHERE user_email=?', [recovery_email], function(err, results, fields) {
@@ -304,6 +312,12 @@ app.post("/update-password", function(req, res) {
     let token = req.body["token"];
     if (!(scripts.isValidPassword(new_password1) && scripts.isValidPassword(new_password2) && (new_password1 == new_password2))) {
         res.redirect(302, "login");
+    }
+
+    // SQL Validation
+    if (!scripts.validateInput(token, "alpha-numeric")){
+        res.redirect(302, "login");
+        return;
     }
 
 
