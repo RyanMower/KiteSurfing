@@ -54,6 +54,10 @@
                      window.location.href = '/login'; 
                    }
                    else { 
+                     if (data.reason === "email-exists"){
+                       window.location.href = '/resetPassword'; 
+                       return;
+                     }
                      console.log("Calling showFailure");
                      //Display error message 
                      showFailure(data.reason);

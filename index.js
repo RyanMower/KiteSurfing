@@ -112,7 +112,7 @@ app.post("/login", function(req, res) {
     var email = req.body["email"];
     var password = req.body["password"];
     let email_ok = scripts.validateInput(email, "email");
-    let pass_ok  = scripts.validateInput(passowrd, "password");
+    let pass_ok  = scripts.validateInput(password, "password");
 
     // SQL Injection Prevention
     if (!(email_ok && pass_ok)){ // Ensure email and pass are safe SQL input
@@ -241,7 +241,10 @@ app.post("/createAccount", function(req, res) {
                 res.json({status: 'success'});
             });
         } else { // Email already already used
-            res.redirect(302, "resetPassword");
+            res.json({
+                status: 'fail',
+                reason: 'email-exists'
+            });
         }
     });
 });
@@ -255,10 +258,8 @@ app.get('/resetPassword', function(req, res) {
     if (req.query.token && scripts.validateInput(req.query.token, "alpha-numeric")){
         connection.query('SELECT * FROM Users WHERE reset_token=?;', [req.query.token], function(err, results, fields) {
             if (err) throw err;
-            console.log("LENGTH!!");
             console.log(results.length);
             if (results.length == 1) {
-                console.log("IM IN HERE");
                 res.render("update-password", {
                     token: req.query.token
                 });
