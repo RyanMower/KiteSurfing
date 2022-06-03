@@ -21,14 +21,17 @@
         <script defer src="js/create_account.js"></script>
         <script>
            function showFailure(reason){
-             console.log("Inside showFailure");
              var alert_elm = document.getElementById("alert-element");
              alert_elm.classList.value = "alert alert-danger";
              alert_elm.innerHTML = reason;
+             setTimeout(function(){
+                     alert_elm.classList.value = "";
+                     alert_elm.innerHTML = "";
+             },4000);
            }
 
            $(document).ready(function () { 
-             $('#CreateAccount-form').submit(function (event) { 
+             $('#CreateAccount-Form').submit(function (event) { 
              event.preventDefault(); 
              //collect the form data using Id Selector for whatever data you need 
              //to send to server 
@@ -40,23 +43,21 @@
              let pass2        = $('#password2').val(); 
              let post_data = {
                  "email": email,
-                 "first-name"  : fname,
-                 "last-name"   : lname,
+                 "first-name": fname,
+                 "last-name" : lname,
                  "phone-number": phone_number,
-                 "password1"   : pass1,
-                 "password2"   : pass2
+                 "password1" : pass1,
+                 "password2" : pass2
              }
-             console.log("Trying to post");
              $.post('/createAccount', 
                post_data, 
                  (data) => { 
                    if (data.status === 'success') { 
                      window.location.href = '/login'; 
-                   }
+             }
                    else { 
-                     console.log("Calling showFailure");
                      //Display error message 
-                     showFailure(data.reason);
+                     showFailure();
                    } 
                  }); 
              }); 
@@ -88,7 +89,7 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                     <div class="col-lg-6">
                         <div id="alert-element"></div>
-                        <form id="CreateAccount-form" >
+                        <form id="CreateAccount-form" method="POST" action="createAccount">
                             <!-- Email address input-->
                             <label for="email"><b>Email Address</b></label>
                             <input name="email" class="form-control" id="email" type="email" placeholder="john@domain.com" required>

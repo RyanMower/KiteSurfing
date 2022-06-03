@@ -111,8 +111,18 @@ app.post("/login", function(req, res) {
     // Authenticate User with Provided Credentials
     var email = req.body["email"];
     var password = req.body["password"];
+    let email_ok = scripts.validateInput(email, "email");
+    let pass_ok  = scripts.validateInput(passowrd, "password");
+
+    // SQL Injection Prevention
+    if (!(email_ok && pass_ok)){ // Ensure email and pass are safe SQL input
+        res.json({
+            status: 'fail'
+        });
+        return;
+    }
+
     var sql = "SELECT * FROM Users WHERE user_email=?;";
-    console.log(scripts.validateInput("Ryan8", "name"));
     connection.query(sql, [email], function(err, rows, fields) {
         // Error Occured
         if (err) {
@@ -163,21 +173,49 @@ app.post("/createAccount", function(req, res) {
     let password1 = req.body["password1"];
     let password2 = req.body["password2"];
     if (!(scripts.isValidPassword(password1) && scripts.isValidPassword(password2) && (password1 == password2))) {
-        /*
-          let reason;
-          if (password1 != password2){
-            reason = "Password's don't match."; }
-          else{
-            reason = "Passwords don't meet criteron.";
-          }
+        let reason;
+        if (password1 != password2){
+          reason = "Password's don't match."; }
+        else{
+          reason = "Passwords don't meet criteron.";
+        }
 
-          res.json({    
-            status: 'fail',
-            reason: reason
-          });
-        */
-        res.redirect(302, "login");
+        res.json({    
+          status: 'fail',
+          reason: reason
+        });
+        return;
     }
+
+    // SQL Prevention
+    let email_ok = scripts.validateInput(email, "email");
+    let fname_ok = scripts.validateInput(fname, "name");
+    let lname_ok = scripts.validateInput(lname, "name");
+    let phone_ok = scripts.validateInput(phone_number, "phone");
+
+    if (!(email_ok && fname_ok && lname_ok && phone_ok)){
+        let reason = "<ul>";
+        if (!email_ok){
+            reason += "<li>Email does not meet criteron.</li>";
+        }
+        if (!fname_ok){
+            console.log("HRE");
+            reason += "<li>First name must be alphanumeric.</li>";
+        }
+        if (!lname_ok){
+            reason += "<li>Last name must be alphanumeric.</li>";
+        }
+        if (!phone_ok){
+            reason += "<li>Phone number must be in formmat 123-123-1234.</li>";
+        }
+        reason += "</ul>";
+        res.json({    
+          status: 'fail',
+          reason: reason
+        });
+        return;
+    }
+    
 
     // Make sure email not attached to existing account
     connection.query('SELECT * FROM Users WHERE user_email=?;', [email], function(err, results, fields) {
@@ -201,7 +239,7 @@ app.post("/createAccount", function(req, res) {
                 if (err) {
                     throw err;
                 }
-                res.redirect(302, "login");
+                res.json({status: 'success'});
             });
         } else { // Email already already used
             res.redirect(302, "resetPassword");
