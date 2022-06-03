@@ -32,36 +32,53 @@ module.exports = {
 
     sendEmail: function sendEmail(email, token) {
  
-    var email = email;
-    var token = token;
- 
-    var raw_data = fs.readFileSync("./configs/secrets.json");
-    json_config = JSON.parse(raw_data);
-    console.log("Email: " + json_config["email"]["email"]);
-    var mail = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: json_config["email"]["email"],   // Your email id
-            pass: json_config["email"]["password"] // Your password
-        }
-    });
-    let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>';
-    console.log(html);
-    var mailOptions = {
-        from: 'kitesurft@gmail.com',
-        to: email,
-        subject: 'Reset Password Link - KiteSurf.com',
-        html: '<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>'
-    };
- 
-    mail.sendMail(mailOptions, function(error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log("Email Success");
-        }
-    });
-}
+        var email = email;
+        var token = token;
+     
+        var raw_data = fs.readFileSync("./configs/secrets.json");
+        json_config = JSON.parse(raw_data);
+        console.log("Email: " + json_config["email"]["email"]);
+        var mail = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: json_config["email"]["email"],   // Your email id
+                pass: json_config["email"]["password"] // Your password
+            }
+        });
+        let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>';
+        console.log(html);
+        var mailOptions = {
+            from: 'kitesurft@gmail.com',
+            to: email,
+            subject: 'Reset Password Link - KiteSurf.com',
+            html: '<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>'
+        };
+     
+        mail.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Email Success");
+            }
+        });
+    },
+
+    validateInput: function validateInput(input, type){
+        let ok = true;
+        let re = null;
+        switch(type){
+            case "email":
+                re = new RegExp("^(?:(?!.*?[.]{2})[a-zA-Z0-9](?:[a-zA-Z0-9.+!%-]{1,64}|)|\"[a-zA-Z0-9.+!% -]{1,64}\")@[a-zA-Z0-9][a-zA-Z0-9.-]+(.[a-z]{2,}|.[0-9]{1,})$");
+                break;
+            case "name":
+                re = new RegExp("^[a-zA-Z0-9]*$");
+                break;
+            case "password":
+                return this.isValidPassword(input);
+        } 
+        (re.exec(input)) ? ok=true : ok=false; // Evaluates Regexp
+        return ok;
+    }
 };
 
 

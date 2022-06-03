@@ -112,6 +112,7 @@ app.post("/login", function(req, res) {
     var email = req.body["email"];
     var password = req.body["password"];
     var sql = "SELECT * FROM Users WHERE user_email=?;";
+    console.log(scripts.validateInput("Ryan8", "name"));
     connection.query(sql, [email], function(err, rows, fields) {
         // Error Occured
         if (err) {
