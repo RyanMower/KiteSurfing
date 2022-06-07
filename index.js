@@ -232,7 +232,8 @@ app.post("/createAccount", function(req, res) {
                 user_email: email,
                 user_phone: phone_number,
                 submission_date: new Date(),
-                user_pass_hash: passwordHash
+                user_pass_hash: passwordHash,
+                isAdmin : false
             };
             connection.query('INSERT Users SET ?;', new_user, function(err, result) {
                 if (err) {
@@ -334,6 +335,24 @@ app.post("/update-password", function(req, res) {
         })
     });
 });
+
+// Get Data for All Contacts (AllContacts.html)
+app.get("/getLoggedInUser", function(req, res) {
+  var json_resp = {};
+  if (req.session.value) {
+      console.log("USER LOGGED IN");
+      json_resp["user"]  = req.session.name;
+      json_resp["email"] = req.session.email;
+  }
+  else{
+      console.log("USER NOT LOGGED IN");
+      json_resp["user"]  = "";
+      json_resp["email"] = "";
+  }
+  // Send JSON to client
+  res.json(json_resp);
+});
+
 
 // function to return the 404 message and error to client
 app.get('*', function(req, res) {

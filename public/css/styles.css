@@ -64,6 +64,15 @@
   --bs-body-bg: #fff;
 }
 
+/* My Styles */
+.box-transparent {
+    background-color: rgba(200, 200, 200, 0.6);
+    padding: 20px;
+    border-radius: 25px;
+}
+
+/* ========= */
+
 *,
 *::before,
 *::after {
