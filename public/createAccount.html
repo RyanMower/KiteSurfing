@@ -18,7 +18,9 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-        <script defer src="js/create_account.js"></script>
+        <!-- Dynamically Updates Navbar -->
+        <script src="js/jquery.js"></script>
+        <script src="js/navbar_scripts.js"></script>
         <script>
            function showFailure(reason){
              console.log("Inside showFailure");
@@ -80,7 +82,7 @@
                 </div>
                 <div id="navbarResponsive">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                        <li id="login-nav" class="nav-item"><a class="nav-link" href="login">Login</a></li>
+                        <li class="nav-item"><a id="login-nav" class="nav-link" href="login">Login</a></li>
                     </ul>
                 </div>
             </div>

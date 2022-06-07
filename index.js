@@ -87,6 +87,11 @@ app.get('/surfing-lessons', function(req, res) {
     res.sendFile(__dirname + '/public/surfing-lessons.html');
 });
 
+// Surfing Lessons Page
+app.get('/profile', function(req, res) {
+    res.sendFile(__dirname + '/public/profile.html');
+});
+
 // Logout Page    
 app.get("/logout", function(req, res) {
     if (!req.session.value) {
