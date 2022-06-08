@@ -89,7 +89,12 @@ app.get('/surfing-lessons', function(req, res) {
 
 // Surfing Lessons Page
 app.get('/profile', function(req, res) {
-    res.sendFile(__dirname + '/public/profile.html');
+    if (req.session.value){
+        res.sendFile(__dirname + '/public/profile.html');
+    }
+    else{
+        res.redirect(302, "/login");
+    }
 });
 
 // Logout Page    
