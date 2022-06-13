@@ -45,15 +45,48 @@
         <!-- Body -->
         <div class="container h-100">
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-left">
-                <div class="col-lg-8 box-transparent">
-                    <div id="fname" class="user-data">First Name: </div><br>
-                    <div id="lname" class="user-data">Last Name: </div><br>
-                    <div id="phone" class="user-data">Phone Number: </div>
+                <div style="margin:'50px';" class="col-lg-8 box-transparent">
+                    <table id="user-data-table" class="table table-striped" border="1">
+                        <tr id="email" class="user-data">
+                            <td>
+                                <div>Email: </div><br>
+                            </td>
+                            <td>
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr id="fname" class="user-data">
+                            <td>
+                                <div>First Name: </div><br>
+                            </td>
+                            <td>
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr id="lname" class="user-data">
+                            <td>
+                                <div>Last Name: </div><br>
+                            </td>
+                            <td>
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr id="phone" class="user-data">
+                            <td>
+                                <div>Phone Number: </div>
+                            </td>
+                            <td>
+                                <div></div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-lg-8 text-center d-flex justify-content-around">
-                        <button id="edit-btn" class="btn btn-primary btn-xl"  style="color: black" href="surfing-lessons">Edit Profile</button>
-                        <button class="btn btn-secondary btn-xl" style="background-color: grey;color: black" href="logout">Logout</button>
+                    <div id="profile-btns" class="col-lg-8 text-center d-flex justify-content-around">
+                        <button id="edit-btn" class="btn btn-primary btn-xl"  style="color: black">Edit Profile</button>
+                        <button id="save-btn" class="btn btn-secondary btn-xl" hidden style="background-color: green;color: white">Save Profile</button>
+                        <button id="cancel-save-btn" class="btn btn-secondary btn-xl" hidden style="background-color: red;color: white">Cancel</button>
+                        <button onclick="location.href='logout';" class="btn btn-secondary btn-xl" style="background-color: grey;color: black">Logout</button>
                     </div>
                 </div>
             </div>

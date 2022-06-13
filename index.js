@@ -363,6 +363,49 @@ app.get("/getLoggedInUser", function(req, res) {
   res.json(json_resp);
 });
 
+// Get Data for All Contacts (AllContacts.html)
+app.get("/getLoggedInUserInfo", function(req, res) {
+  var json_resp = {};
+  let keys = [
+      "user_id",
+      "user_fname",
+      "user_lname",
+      "user_email",
+      "user_phone",
+      "submission_date",
+  ]
+  if (req.session.value) {
+      json_resp["status"]="success";
+        // QUERY DB HERE TODO
+        var sql = "SELECT * FROM Users WHERE user_email=?;";
+        connection.query(sql, [req.session.email], function(err, rows, fields) {
+            // Error Occured
+            if (err) {
+                res.json({status: 'fail'});
+                return;
+            }
+            // More than one or no users with provided 'login'
+            if (rows.length != 1) {
+                console.log("Too many, or too few users.");
+                res.json({
+                    status: 'fail'
+                });
+            } else {
+                //console.log(Object.keys(fields));
+                for (let i = 0; i<keys.length; i++){
+                    json_resp[keys[i]] = rows[0][keys[i]];
+                }
+              // Send JSON to client
+              res.json(json_resp);
+            }
+        });
+  }
+  else{
+      json_resp["status"]  = "fail";
+      // Send JSON to client
+      res.json(json_resp);
+  }
+});
 
 // function to return the 404 message and error to client
 app.get('*', function(req, res) {
