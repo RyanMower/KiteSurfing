@@ -71,6 +71,11 @@ app.get('/index.html', function(req, res) {
 app.get('/createAccount', function(req, res) {
     res.sendFile(__dirname + '/public/createAccount.html');
 });
+// Update Account Page
+app.get('/updateAccount', function(req, res) {
+    console.log("SERVING");
+    res.sendFile(__dirname + '/public/updateAccount.html');
+});
 
 // E-Commerce Page 
 app.get('/e-commerce', function(req, res) {
@@ -172,6 +177,93 @@ app.post("/login", function(req, res) {
     });
 });
 
+
+// Update Account 
+app.post("/updateAccount", function(req, res) {
+    // Authenticate User with Provided Credentials
+    let email = req.body["email"];
+    let fname = req.body["first-name"];
+    let lname = req.body["last-name"];
+    let phone_number = req.body["phone-number"];
+    let password1 = req.body["password1"];
+    let password2 = req.body["password2"];
+    if (!(scripts.isValidPassword(password1) && scripts.isValidPassword(password2) && (password1 == password2))) {
+        let reason;
+        if (password1 != password2){
+          reason = "Password's don't match."; }
+        else{
+          reason = "Passwords don't meet criteron.";
+        }
+
+        res.json({    
+          status: 'fail',
+          reason: reason
+        });
+        return;
+    }
+
+    // SQL Prevention
+    let email_ok = scripts.validateInput(email, "email");
+    let fname_ok = scripts.validateInput(fname, "name");
+    let lname_ok = scripts.validateInput(lname, "name");
+    let phone_ok = scripts.validateInput(phone_number, "phone");
+
+    if (!(email_ok && fname_ok && lname_ok && phone_ok)){
+        let reason = "<ul>";
+        if (!email_ok){
+            reason += "<li>Email does not meet criteron.</li>";
+        }
+        if (!fname_ok){
+            reason += "<li>First name must be alphanumeric.</li>";
+        }
+        if (!lname_ok){
+            reason += "<li>Last name must be alphanumeric.</li>";
+        }
+        if (!phone_ok){
+            reason += "<li>Phone number must be in formmat 123-123-1234.</li>";
+        }
+        reason += "</ul>";
+        res.json({    
+          status: 'fail',
+          reason: reason
+        });
+        return;
+    }
+    
+
+    // Make sure email not attached to existing account
+    connection.query('SELECT * FROM Users WHERE user_email=?;', [email], function(err, results, fields) {
+        if (err) {
+            throw err;
+        }
+
+        if (results.length == 0) {
+            // Create Account Here
+            let salt_rounds = 10;
+            const passwordHash = bcrypt.hashSync(password1, salt_rounds);
+            const new_user = {
+                user_fname: fname,
+                user_lname: lname,
+                user_email: email,
+                user_phone: phone_number,
+                submission_date: new Date(),
+                user_pass_hash: passwordHash,
+                isAdmin : false
+            };
+            connection.query('INSERT Users SET ?;', new_user, function(err, result) {
+                if (err) {
+                    throw err;
+                }
+                res.json({status: 'success'});
+            });
+        } else { // Email already already used
+            res.json({
+                status: 'fail',
+                reason: 'email-exists'
+            });
+        }
+    });
+});
 
 // Create Account 
 app.post("/createAccount", function(req, res) {

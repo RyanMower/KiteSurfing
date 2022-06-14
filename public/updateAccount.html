@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="Ryan Mower" />
-        <title>KiteSurfing - Create Account</title>
+        <title>KiteSurfing - Update Account</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap Icons-->
@@ -31,7 +31,7 @@
            }
 
            $(document).ready(function () { 
-             $('#CreateAccount-form').submit(function (event) { 
+             $('#UpdateAccount-form').submit(function (event) { 
              event.preventDefault(); 
              //collect the form data using Id Selector for whatever data you need 
              //to send to server 
@@ -93,17 +93,17 @@
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-lg-8 col-xl-6 text-center">
-                        <h2 class="mt-0">Create an Account Here!</h2>
+                        <h2 class="mt-0">Update Account Here!</h2>
                         <hr class="divider" />
                     </div>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                     <div class="col-lg-6">
                         <div id="alert-element"></div>
-                        <form id="CreateAccount-form" >
+                        <form id="UpdateAccount-form" >
                             <!-- Email address input-->
                             <label for="email"><b>Email Address</b></label>
-                            <input name="email" class="form-control" id="email" type="email" placeholder="john@domain.com" required>
+                            <div id="email"></div>
                             <br>
                             <!-- First Name -->
                             <label for="first-name"><b>First Name</b></label>
@@ -136,7 +136,7 @@
                             </div>
                             <div id="server-password-err" hidden></div>
                             <!-- Submit Button -->
-                            <button class="btn btn-primary" type="submit">Create Account</button>
+                            <button class="btn btn-primary" type="submit">Update Account</button>
                         </form>
                     </div>
                 </div>

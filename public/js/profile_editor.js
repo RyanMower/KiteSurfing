@@ -14,7 +14,7 @@ function addUserInfo() {
         if (status === "success") {
             var data_elms = document.getElementsByClassName("user-data"); 
             for (let i = 0; i < data_elms.length; i++){
-                data_elms[i].querySelectorAll("div")[1].textContent = this.response[keys[i]];
+                data_elms[i].querySelectorAll("div")[1].innerHTML = this.response[keys[i]];
                 user_data[keys[i]] = this.response[keys[i]];
             }
         }
@@ -43,8 +43,7 @@ function getUserEditTable(){
                 <div>Email: </div><br>
             </td>
             <td>
-                <input type="email" id="user_email" name="user_email" value="${email}">
-                <label for="user_email"></label><br>
+                <div>${email}</div>
             </td>
         </tr>
         <tr id="fname" class="user-data">
@@ -74,6 +73,24 @@ function getUserEditTable(){
                 <label for="user_phone"></label><br>
             </td>
         </tr>
+        <tr id="pass1" class="user-data password-input">
+            <td>
+                <div>Password: </div><br>
+            </td>
+            <td>
+                <input type="text" id="pass1" name="pass1" placeholder="Leave blank to not update." value="">
+                <label for="pass1"></label><br>
+            </td>
+        </tr>
+        <tr id="pass2" class="user-data password-input">
+            <td>
+                <div>Re-enter Password: </div><br>
+            </td>
+            <td>
+                <input type="text" id="pass2" name="pass2" placeholder="Leave blank to not update." value="">
+                <label for="pass2"></label><br>
+            </td>
+        </tr>
     `;
     return html;
 
@@ -83,11 +100,19 @@ function profile_save(){
     console.log("TRYING TO Save Updates");
 }
 
-function profile_save(){
+function profile_cancel(){
     console.log("Canceling Edits");
+    window.location.reload();
 }
 
 function launchEditMode(){
+    /*
+    var pass_inputs = document.getElementsByClassName("password-input");
+    for (let i = 0; i < pass_inputs.length; i++){
+        pass_inputs[i].setAttribute("hidden", false);
+    }
+    */
+
     var data_elms = document.getElementsByClassName("user-data"); 
     let table = document.getElementById("user-data-table");
     table.innerHTML = getUserEditTable(data_elms);
@@ -97,10 +122,10 @@ function launchEditMode(){
     edit_btn.setAttribute("hidden", true);
     let save_btn = document.getElementById("save-btn");
     save_btn.removeAttribute("hidden");
-    // ADD SAVE LISTENER TODO
+    save_btn.addEventListener("click", profile_save);
     let cancel_btn = document.getElementById("cancel-save-btn");
     cancel_btn.removeAttribute("hidden");
-    // ADD CANCEL LISTENER TODO
+    cancel_btn.addEventListener("click", profile_cancel);
 }
 
 window.onload = (event) =>{

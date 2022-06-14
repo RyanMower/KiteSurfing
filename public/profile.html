@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+    <head id="page-head">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -21,7 +21,7 @@
         <!-- Dynamically Updates Navbar -->
         <script src="js/jquery.js"></script>
         <script src="js/navbar_scripts.js"></script>
-        <script src="js/profile_editor.js"></script>
+        <!--  <script src="js/profile_editor.js"></script> -->
 
     </head>
     <body id="page-top">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div id="profile-btns" class="col-lg-8 text-center d-flex justify-content-around">
-                        <button id="edit-btn" class="btn btn-primary btn-xl"  style="color: black">Edit Profile</button>
+                        <button id="edit-btn" class="btn btn-primary btn-xl" onclick="location.href='updateAccount';" style="color: black">Edit Profile</button>
                         <button id="save-btn" class="btn btn-secondary btn-xl" hidden style="background-color: green;color: white">Save Profile</button>
                         <button id="cancel-save-btn" class="btn btn-secondary btn-xl" hidden style="background-color: red;color: white">Cancel</button>
                         <button onclick="location.href='logout';" class="btn btn-secondary btn-xl" style="background-color: grey;color: black">Logout</button>
