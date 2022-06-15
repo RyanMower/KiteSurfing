@@ -22,11 +22,13 @@ function isValidPassword(password){
 }
 
 function displayPasswordRequirements(){
-    console.log("INSIDE HERE");
-    let password1 = document.getElementsByClassName("password-input")[0].value;
-    let password2 = document.getElementsByClassName("password-input")[1].value;
+    let password1 = document.getElementById("password1").value;
+    let password2 = document.getElementById("password2").value;
     let password1_okay = isValidPassword(password1);
     let password2_okay = isValidPassword(password2);
+    //console.log("Pass1: " + password1_okay);
+    //console.log("Pass1: " + password2_okay);
+    console.log("Pass2: " + password2);
     let info_alert_password = document.getElementById("info-alert-password");
 
     if (password1_okay && password2_okay && (password1 == password2)){
@@ -37,8 +39,8 @@ function displayPasswordRequirements(){
     }
 }
 window.addEventListener('DOMContentLoaded', event => {
-   document.getElementsByClassName("password-input")[0].addEventListener("keyup", displayPasswordRequirements)
-   document.getElementsByClassName("password-input")[1].addEventListener("keyup", displayPasswordRequirements)
+    document.getElementById("password1").addEventListener("keyup", displayPasswordRequirements);
+    document.getElementById("password2").addEventListener("keyup", displayPasswordRequirements);
 });
     
 

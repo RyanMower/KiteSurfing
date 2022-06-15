@@ -71,11 +71,6 @@ app.get('/index.html', function(req, res) {
 app.get('/createAccount', function(req, res) {
     res.sendFile(__dirname + '/public/createAccount.html');
 });
-// Update Account Page
-app.get('/updateAccount', function(req, res) {
-    console.log("SERVING");
-    res.sendFile(__dirname + '/public/updateAccount.html');
-});
 
 // E-Commerce Page 
 app.get('/e-commerce', function(req, res) {
@@ -181,6 +176,9 @@ app.post("/login", function(req, res) {
 // Update Account 
 app.post("/updateAccount", function(req, res) {
     // Authenticate User with Provided Credentials
+    console.log("HRE");
+    res.redirect(302, "/login");
+    /*
     let email = req.body["email"];
     let fname = req.body["first-name"];
     let lname = req.body["last-name"];
@@ -263,6 +261,7 @@ app.post("/updateAccount", function(req, res) {
             });
         }
     });
+*/
 });
 
 // Create Account 
@@ -352,10 +351,57 @@ app.post("/createAccount", function(req, res) {
     });
 });
 
+// Update Account Page
+app.get('/updateAccount', function(req, res) {
+    if (!req.session.value){
+        res.redirect(302, "/login");
+    }
+    else{
+      var json_resp = {};
+      let keys = [
+          "user_id",
+          "user_fname",
+          "user_lname",
+          "user_email",
+          "user_phone",
+          "submission_date",
+      ]
+      if (req.session.value) {
+          json_resp["status"]="success";
+            // QUERY DB HERE TODO
+            var sql = "SELECT * FROM Users WHERE user_email=?;";
+            connection.query(sql, [req.session.email], function(err, rows, fields) {
+                // Error Occured
+                if (err) {
+                    res.json({status: 'fail'});
+                    return;
+                }
+                // More than one or no users with provided 'login'
+                if (rows.length != 1) {
+                    console.log("Too many, or too few users.");
+                    res.json({
+                        status: 'fail'
+                    });
+                } else {
+                    //console.log(Object.keys(fields));
+                    for (let i = 0; i<keys.length; i++){
+                        json_resp[keys[i]] = rows[0][keys[i]];
+                    }
+                  // Send JSON to client
+                  res.render("update-account", json_resp);
+                }
+            });
+      }
+      else{
+          json_resp["status"]  = "fail";
+          // Send JSON to client
+          res.render("update-account", json_resp);
+      }
+    }
+});
+
 // Reset Password Page - GET
 app.get('/resetPassword', function(req, res) {
-    // Responding from email
-    console.log(req.query.token)
 
     // SQL Validation
     if (req.query.token && scripts.validateInput(req.query.token, "alpha-numeric")){

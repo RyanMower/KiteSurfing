@@ -21,7 +21,7 @@
     <!-- Dynamically Updates Navbar -->
     <script src="js/jquery.js"></script>
     <script src="js/navbar_scripts.js"></script>
-    <script src="js/create_account.js"></script>
+    <script src="js/update_account.js"></script>
     <script>
       function showFailure(reason){
         console.log("Inside showFailure");
@@ -35,7 +35,7 @@
         event.preventDefault(); 
         //collect the form data using Id Selector for whatever data you need 
         //to send to server 
-        let email        = $('#email').val(); 
+        let email        = $('#email').innerHTML; 
         let fname        = $('#first-name').val(); 
         let lname        = $('#last-name').val(); 
         let phone_number = $('#phone-number').val(); 
@@ -100,17 +100,21 @@
         <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
           <div class="col-lg-6">
             <div id="alert-element"></div>
+              <!------------------>
+              <% if ( status === "fail") { %>
+                  <h3>Sorry, failed to load data</h3>
+                <% } 
+              else { %>
             <div style="margin:'50px';" class="col-lg-8 box-transparent">
               <table id="user-data-table" class="table table-striped" border="1">
                 <form id="UpdateAccount-form" >
-                  <!------------------>
-                  <tr id="email" class="user-data">
+                  <tr class="user-data">
                     <td>
                       <div>Email: </div>
                       <br>
                     </td>
                     <td>
-                      <div>${email}</div>
+                      <div id="email"><%= user_email %></div>
                     </td>
                   </tr>
                   <tr id="fname" class="user-data">
@@ -119,7 +123,7 @@
                       <br>
                     </td>
                     <td>
-                      <input name="first-name" class="form-control" id="first-name" type="text" placeholder="John" required>
+                      <input name="first-name" class="form-control" id="first-name" type="text" value="<%= user_fname %>">
                     </td>
                   </tr>
                   <tr id="lname" class="user-data">
@@ -128,39 +132,40 @@
                       <br>
                     </td>
                     <td>
-                      <input name="last-name" class="form-control" id="first-name" type="text" placeholder="Doe" required>
+                      <input name="last-name" class="form-control" id="first-name" type="text" value="<%= user_lname %>">
                     </td>
                   </tr>
                   <tr id="phone" class="user-data">
                     <td>
-                      <label for="phone-number"><b>Phone Number</b></label>
+                      <label for="phone-number"><b>Phone Number: </b></label>
                       <br>
                     </td>
                     <td>
-                      <input name="phone-number" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Ex. 123-456-7890" id="phone-number" type="tel" placeholder="123-456-7890" required>
+                      <input name="phone-number" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Ex. 123-456-7890" id="phone-number" type="tel" value="<%= user_phone %>">
                     </td>
                   </tr>
                   <tr id="pass1" class="user-data password-input">
                     <td>
-                      <label for="password1">Password</label>
+                      <label for="password1"><b>Password</b></label>
                       <br>
                     </td>
                     <td>
-                       <input name="password1" class="form-control password-input" id="password1" type="password" placeholder="Password" required></textarea>
+                       <input name="password1" class="form-control password-input" id="password1" type="password" placeholder="Leave blank to NOT update"></textarea>
                     </td>
                   </tr>
                   <tr id="pass2" class="user-data password-input">
                     <td>
-                      <label for="password2">Re-type Password</label>
+                      <label for="password2"><b>Re-type Password</b></label>
                       <br>
                     </td>
                     <td>
-                      <input name="password2" class="form-control password-input" id="password2" type="password" placeholder="Password" required></textarea>
+                      <input name="password2" class="form-control password-input" id="password2" type="password" placeholder="Leave Blank to NOT update"></textarea>
                     </td>
                   </tr>
                 </form>
               </table>
             </div>
+              <% } %>
             <br>
             <div id="info-alert-password" class="alert alert-info" hidden>
               Password must include:
