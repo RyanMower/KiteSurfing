@@ -176,9 +176,6 @@ app.post("/login", function(req, res) {
 // Update Account 
 app.post("/updateAccount", function(req, res) {
     // Authenticate User with Provided Credentials
-    console.log("HRE");
-    res.redirect(302, "/login");
-    /*
     let email = req.body["email"];
     let fname = req.body["first-name"];
     let lname = req.body["last-name"];
@@ -206,6 +203,11 @@ app.post("/updateAccount", function(req, res) {
     let lname_ok = scripts.validateInput(lname, "name");
     let phone_ok = scripts.validateInput(phone_number, "phone");
 
+    res.json({    
+      status: 'fail',
+      reason: "testing" 
+    });
+    /*
     if (!(email_ok && fname_ok && lname_ok && phone_ok)){
         let reason = "<ul>";
         if (!email_ok){
@@ -261,7 +263,7 @@ app.post("/updateAccount", function(req, res) {
             });
         }
     });
-*/
+    */ 
 });
 
 // Create Account 

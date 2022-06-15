@@ -24,49 +24,47 @@
     <script src="js/update_account.js"></script>
     <script>
       function showFailure(reason){
-        console.log("Inside showFailure");
         var alert_elm = document.getElementById("alert-element");
         alert_elm.classList.value = "alert alert-danger";
         alert_elm.innerHTML = reason;
       }
       
       $(document).ready(function () { 
-        $('#UpdateAccount-form').submit(function (event) { 
-        event.preventDefault(); 
-        //collect the form data using Id Selector for whatever data you need 
-        //to send to server 
-        let email        = $('#email').innerHTML; 
-        let fname        = $('#first-name').val(); 
-        let lname        = $('#last-name').val(); 
-        let phone_number = $('#phone-number').val(); 
-        let pass1        = $('#password1').val(); 
-        let pass2        = $('#password2').val(); 
-        let post_data = {
-            "email": email,
-            "first-name"  : fname,
-            "last-name"   : lname,
-            "phone-number": phone_number,
-            "password1"   : pass1,
-            "password2"   : pass2
-        }
-        console.log("Trying to post");
-        $.post('/createAccount', 
-          post_data, 
-            (data) => { 
-              if (data.status === 'success') { 
-                window.location.href = '/login'; 
-              }
-              else { 
-                if (data.reason === "email-exists"){
-                  window.location.href = '/resetPassword'; 
-                  return;
+        $('#UpdateAccount-form').on("submit", function (event) { 
+          event.preventDefault(); 
+          //collect the form data using Id Selector for whatever data you need 
+          //to send to server 
+          let email        = $('#email')[0].innerHTML; 
+          let fname        = $('#first-name').val(); 
+          let lname        = $('#last-name').val(); 
+          let phone_number = $('#phone-number').val(); 
+          let pass1        = $('#password1').val(); 
+          let pass2        = $('#password2').val(); 
+          let post_data = {
+              "email": email,
+              "first-name"  : fname,
+              "last-name"   : lname,
+              "phone-number": phone_number,
+              "password1"   : pass1,
+              "password2"   : pass2
+          }
+          console.log("Trying to post");
+          $.post('/updateAccount', 
+            post_data, 
+              (data) => { 
+                if (data.status === 'success') { 
+                  window.location.href = '/login'; 
                 }
-                console.log("Calling showFailure");
-                //Display error message 
-                showFailure(data.reason);
-              } 
-            }); 
-        }); 
+                else { 
+                  if (data.reason === "email-exists"){
+                    window.location.href = '/resetPassword'; 
+                    return;
+                  }
+                  //Display error message 
+                  showFailure(data.reason);
+                } 
+              }); 
+          }); 
       });
     </script>
   </head>
@@ -106,8 +104,8 @@
                 <% } 
               else { %>
             <div style="margin:'50px';" class="col-lg-8 box-transparent">
-              <table id="user-data-table" class="table table-striped" border="1">
                 <form id="UpdateAccount-form" >
+                  <table id="user-data-table" class="table table-striped" border="1">
                   <tr class="user-data">
                     <td>
                       <div>Email: </div>
@@ -162,8 +160,9 @@
                       <input name="password2" class="form-control password-input" id="password2" type="password" placeholder="Leave Blank to NOT update"></textarea>
                     </td>
                   </tr>
+                  </table>
+                  <button class="btn btn-primary" type="submit">Update Account</button>
                 </form>
-              </table>
             </div>
               <% } %>
             <br>
@@ -178,7 +177,6 @@
             </div>
             <div id="server-password-err" hidden></div>
             <!-- Submit Button -->
-            <button class="btn btn-primary" type="submit">Update Account</button>
             </form>
           </div>
         </div>
