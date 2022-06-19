@@ -70,6 +70,13 @@
     padding: 20px;
     border-radius: 25px;
 }
+
+.filter-rectangle{
+  height: 10em;
+  width: 100em;
+  background-color: #555;
+  border-radius: 5px;
+}
 /* ========= */
 
 *,
