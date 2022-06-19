@@ -28,6 +28,47 @@
         alert_elm.classList.value = "alert alert-danger";
         alert_elm.innerHTML = reason;
       }
+      function cancelDelete(){
+        location.reload(); 
+      }
+
+      function showDeleteConfirmation(){
+        let confirm_delete_elms = document.getElementsByClassName("confirm-delete");
+        for (let i = 0; i < confirm_delete_elms.length; i++){
+          confirm_delete_elms[i].removeAttribute("hidden");
+        }
+
+        let update_btns = document.getElementsByClassName("update-btns");
+        for (let i = 0; i < update_btns.length; i++){
+          update_btns[i].setAttribute("hidden", true);
+        }
+      }
+
+      function deleteAccount(){
+        var alert_elm = document.getElementById("delete-account-btn");
+        var password = document.getElementById("password-confirmation").value;
+        console.log(password);
+        let email= $('#email')[0].innerHTML; 
+        let post_data = {
+          "email": email,
+          "password": password,
+        };
+        $.post('/deleteAccount', 
+          post_data, 
+            (data) => { 
+              if (data.status === 'success') { 
+                window.location.href = '/login'; 
+              }
+              else { 
+                if (data.reason === "email-exists"){
+                  window.location.href = '/resetPassword'; 
+                  return;
+                }
+                //Display error message 
+                showFailure(data.reason);
+              } 
+          }); 
+      }
       
       $(document).ready(function () { 
         $('#UpdateAccount-form').on("submit", function (event) { 
@@ -48,7 +89,7 @@
               "password1"   : pass1,
               "password2"   : pass2
           }
-          console.log("Trying to post");
+          console.log(lname);
           $.post('/updateAccount', 
             post_data, 
               (data) => { 
@@ -64,7 +105,10 @@
                   showFailure(data.reason);
                 } 
               }); 
-          }); 
+        }); 
+        document.getElementById("delete-account-btn").addEventListener("click", function(event){
+          event.preventDefault()
+        });
       });
     </script>
   </head>
@@ -130,7 +174,7 @@
                       <br>
                     </td>
                     <td>
-                      <input name="last-name" class="form-control" id="first-name" type="text" value="<%= user_lname %>">
+                      <input name="last-name" class="form-control" id="last-name" type="text" value="<%= user_lname %>">
                     </td>
                   </tr>
                   <tr id="phone" class="user-data">
@@ -161,8 +205,13 @@
                     </td>
                   </tr>
                   </table>
-                  <button class="btn btn-primary" type="submit">Update Account</button>
+                  <button class="btn btn-primary update-btns" type="submit">Update Account</button>
+                  <button class="btn btn-danger update-btns" id="delete-account-btn" onclick="showDeleteConfirmation()">Delete Account</button>
                 </form>
+                  <label hidden class="confirm-delete" for="password-confirmation"><b>Re-enter password to delete account</b></label>
+                  <input name="password-confirmation" class="confirm-delete" class="form-control password-input" hidden id="password-confirmation" type="password" placeholder="Password"></textarea>
+                  <button class="btn btn-danger confirm-delete" id="delete-account-submit" hidden onclick="deleteAccount()" >Delete Account</button>
+                  <button class="btn btn-secondary confirm-delete" id="cancel-delete" hidden onclick="cancelDelete()">Cancel</button>
             </div>
               <% } %>
             <br>

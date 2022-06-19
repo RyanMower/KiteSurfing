@@ -172,6 +172,37 @@ app.post("/login", function(req, res) {
     });
 });
 
+// Delete Account 
+app.post("/deleteAccount", function(req, res) {
+    // Authenticate User with Provided Credentials
+    let email = req.body['email'];
+    let password = req.body['password'];
+    let sql = "SELECT user_pass_hash FROM Users WHERE user_email=?;"
+    connection.query(sql, [email], function(err, rows, fields) {
+        // Error Occured
+        if (err) {
+            res.json({status: 'fail'});
+            return;
+        }
+        if (bcrypt.compareSync(password, rows[0].user_pass_hash)){
+            let delete_sql = "DELETE FROM Users WHERE user_email=?;" ;
+            connection.query(delete_sql, [email], function(err, rows, fields){
+                if (err) {
+                    res.json({status: 'fail'});
+                }
+                req.session.destroy();
+                res.json({status: "success"}); // User successfully deleted
+            });
+        }else{
+            res.json({
+                status: 'fail',
+                reason: "Invalid Password"
+            });
+        }
+    });
+    
+});
+
 
 // Update Account 
 app.post("/updateAccount", function(req, res) {
@@ -182,88 +213,68 @@ app.post("/updateAccount", function(req, res) {
     let phone_number = req.body["phone-number"];
     let password1 = req.body["password1"];
     let password2 = req.body["password2"];
-    if (!(scripts.isValidPassword(password1) && scripts.isValidPassword(password2) && (password1 == password2))) {
-        let reason;
-        if (password1 != password2){
-          reason = "Password's don't match."; }
-        else{
-          reason = "Passwords don't meet criteron.";
-        }
+    let updating = {
+        "password": false,
+        "fname"   : false,
+        "lname"   : false,
+        "phone"   : false
+    };
 
-        res.json({    
-          status: 'fail',
-          reason: reason
-        });
-        return;
+    // Makes sure both passwords have data, otherwise, don't update
+    if (password1 && password2) {
+        if (scripts.isValidPassword(password1) && scripts.isValidPassword(password2) && (password1 == password2)) {
+            console.log("Updting password");
+            updating["password"] = true;
+        }
     }
 
+
+
     // SQL Prevention
-    let email_ok = scripts.validateInput(email, "email");
     let fname_ok = scripts.validateInput(fname, "name");
     let lname_ok = scripts.validateInput(lname, "name");
     let phone_ok = scripts.validateInput(phone_number, "phone");
 
-    res.json({    
-      status: 'fail',
-      reason: "testing" 
-    });
-    /*
-    if (!(email_ok && fname_ok && lname_ok && phone_ok)){
-        let reason = "<ul>";
-        if (!email_ok){
-            reason += "<li>Email does not meet criteron.</li>";
-        }
-        if (!fname_ok){
-            reason += "<li>First name must be alphanumeric.</li>";
-        }
-        if (!lname_ok){
-            reason += "<li>Last name must be alphanumeric.</li>";
-        }
-        if (!phone_ok){
-            reason += "<li>Phone number must be in formmat 123-123-1234.</li>";
-        }
-        reason += "</ul>";
+    if (!(fname_ok && lname_ok && phone_ok)){
         res.json({    
           status: 'fail',
-          reason: reason
+          reason: "Invalid Input" 
         });
-        return;
     }
     
-
     // Make sure email not attached to existing account
     connection.query('SELECT * FROM Users WHERE user_email=?;', [email], function(err, results, fields) {
         if (err) {
             throw err;
         }
+        if (results.length == 1) {
+            // Update Account Here
+            let sql_update = "UPDATE Users SET ";
 
-        if (results.length == 0) {
-            // Create Account Here
-            let salt_rounds = 10;
-            const passwordHash = bcrypt.hashSync(password1, salt_rounds);
-            const new_user = {
-                user_fname: fname,
-                user_lname: lname,
-                user_email: email,
-                user_phone: phone_number,
-                submission_date: new Date(),
-                user_pass_hash: passwordHash,
-                isAdmin : false
-            };
-            connection.query('INSERT Users SET ?;', new_user, function(err, result) {
-                if (err) {
-                    throw err;
-                }
+            // Update First Name 
+            sql_update += "user_fname=?, ";
+
+            // Update Last Name 
+            sql_update += "user_lname=?, ";
+
+            // Update Phone Number 
+            sql_update += "user_phone=? ";
+
+            // Update current user 
+            sql_update += "WHERE user_email=?;";
+            req.session.name = fname;
+            connection.query(sql_update, [fname, lname, phone_number, email], function(err, results, fields){
+                if (err) { throw err;}
                 res.json({status: 'success'});
             });
+
         } else { // Email already already used
             res.json({
                 status: 'fail',
-                reason: 'email-exists'
+                reason: 'Invalid Email Input'
             });
         }
     });
-    */ 
 });
 
 // Create Account 
@@ -490,12 +501,10 @@ app.post("/update-password", function(req, res) {
 app.get("/getLoggedInUser", function(req, res) {
   var json_resp = {};
   if (req.session.value) {
-      console.log("USER LOGGED IN");
       json_resp["user"]  = req.session.name;
       json_resp["email"] = req.session.email;
   }
   else{
-      console.log("USER NOT LOGGED IN");
       json_resp["user"]  = "";
       json_resp["email"] = "";
   }
