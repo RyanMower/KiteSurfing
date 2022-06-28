@@ -43,35 +43,23 @@
         </nav>
 
         <!-- Filter Header -->
-        <div id="filter-container"></div> 
-        <div class="filter-rectangle" style = "position:relative; left:80px; top:200px;">
-            <table >
-                <tr>
-                    <td>
-                        <label for="filter-name"><b>Name: </b></label><br>
-                    </td>
-                    <td>
-                        <input name="filter-name" id="filter-name">
-                    </td>
-                    <td>
-                        <label for="filter-location"><b>Location: </b></label><br>
-                    </td>
-                    <td>
-                        <input name="filter-location" id="filter-location">
-                    </td>
-                    <td>
-                        <label for="filter-distance"><b>Distance: </b></label><br>
-                    </td>
-                    <td>
-                        <input name="filter-distance" id="filter-distance">
-                    </td>
-                    <td>
-                        <button class="btn-primary">Filter</button>
-                    </td>
-                </tr>
-            </table>
+        <div id="filter-container" class="filter-rectangle">
+            <form action="getInstructors" method="POST">
+                <div class="form-row align-items-center">
+                    <div class="col-auto">
+                        <label class="sr-only" for="instructor-name">Name</label>
+                        <input type="text" class="mb-2" id="instructor-name" placeholder="Jane Doe">
+                        <label class="sr-only" for="location">Location</label>
+                        <input type="text" class="mb-2" id="location">
+                        <label class="sr-only" for="distance">Distance</label>
+                        <input type="text" class="mb-2" id="distance">
+                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                    </div>
+                </div>
+            </form> 
         </div>
-
+        
+       
         <!-- Kite Surf Lessons -->
         <div id="kite-surf-lessons-container"></div> 
 

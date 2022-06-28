@@ -467,6 +467,11 @@ app.post("/resetPassword", function(req, res) {
     });
 });
 
+// Find Instructors/Lessons that meet the criterion
+app.post("/getInstructors", function(req, res) {
+    console.log("Post to find instructors");
+});
+
 // Update Password - POST
 app.post("/update-password", function(req, res) {
     // Authenticate User with Provided Credentials
