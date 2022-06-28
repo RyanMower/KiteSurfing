@@ -47,16 +47,44 @@
             <form action="getInstructors" method="POST">
                 <div class="form-row align-items-center">
                     <div class="col-auto">
-                        <label class="sr-only" for="instructor-name">Name</label>
-                        <input type="text" class="mb-2" id="instructor-name" placeholder="Jane Doe">
-                        <label class="sr-only" for="location">Location</label>
-                        <input type="text" class="mb-2" id="location">
-                        <label class="sr-only" for="distance">Distance</label>
-                        <input type="text" class="mb-2" id="distance">
-                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                        <table>
+                            <tr>
+                                <td>
+                                    <label class="sr-only" for="instructor-name">Name</label>
+                                </td>
+                                <td>
+                                    <label class="sr-only" for="location">Location</label>
+                                </td>
+                                <td>
+                                    <label class="sr-only" for="distance">Distance Willing to Travel (mi)</label>
+                                </td>
+                                <td>
+                                    <label class="sr-only" for="rate">Max rate/hr</label>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary mb-2 blank-col-on-left" onclick="window.location.href='becomeAnInstructor'">Become an Instructor</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" class="mb-2" id="instructor-name" placeholder="Jane Doe">
+                                </td>
+                                <td>
+                                    <input type="text" class="mb-2" id="location">
+                                </td>
+                                <td>
+                                    <input type="number" class="mb-2" id="distance">
+                                </td>
+                                <td>
+                                    <input type="number" class="mb-2" id="rate" placeholder="30">
+                                </td>
+                            </tr>
+                        </table>
+                        <button type="submit" class="btn btn-primary mb-2">Filter</button>
                     </div>
                 </div>
             </form> 
+
         </div>
         
        

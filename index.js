@@ -116,6 +116,12 @@ app.get('/login', function(req, res) {
     }
 });
 
+// Login Page
+app.get('/becomeAnInstructor', function(req, res) {
+    console.log("Becoming an instructor");
+    res.sendFile(__dirname + '/public/become-instructor.html');
+});
+
 // Authenticate 
 app.post("/login", function(req, res) {
     // Authenticate User with Provided Credentials

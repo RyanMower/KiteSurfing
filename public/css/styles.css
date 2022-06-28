@@ -72,15 +72,16 @@
 }
 
 .filter-rectangle{
-  height: 8em;
+  height: 10em;
   width: 100em;
   background-color: #555;
   border-radius: 5px;
-  padding-top: 50px;
+  padding-top: 10px;
   padding-left: 50px;
   position: relative;
   top: 80px; left: 40px
 }
+
 /* ========= */
 
 *,
