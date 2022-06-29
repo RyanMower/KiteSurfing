@@ -77,9 +77,14 @@
   background-color: #555;
   border-radius: 5px;
   padding-top: 10px;
-  padding-left: 50px;
+  padding-bottom: 10px;
+  padding-left: 100px;
   position: relative;
-  top: 80px; left: 40px
+  top: 80px; left: 100px
+}
+#kite-surf-lessons-container{
+  padding-top: 150px;
+  padding-left: 100px;
 }
 
 /* ========= */

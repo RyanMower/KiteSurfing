@@ -21,6 +21,33 @@
         <!-- Dynamically Updates Navbar -->
         <script src="js/jquery.js"></script>
         <script src="js/navbar_scripts.js"></script>
+       <script>
+           $(document).ready(function () { 
+             $('#get-lessons-form').submit(function (event) { 
+             event.preventDefault(); 
+             //collect the form data using Id Selector for whatever data you need 
+             //to send to server 
+             let instr_name    = $('#instructor-name').val(); 
+             let location      = $('#location').val(); 
+             let distance      = $('#distance').val(); 
+             let post_data  = {
+                 "instructor-name"  : instr_name,
+                 "location"   : location,
+                 "distance": distance,
+                 "rate"   : rate
+             }
+             console.log("Getting lessons");
+             $.post('/getLessons', 
+               post_data, 
+                 (data) => { 
+                   if (data.status === 'success') { 
+                        // Create Lesson cards here TODO 
+                       console.log("CREATE LEsson cards here");
+                   }
+                 }); 
+             }); 
+           });
+        </script>
 
     </head>
     <body id="page-top">
@@ -44,7 +71,7 @@
 
         <!-- Filter Header -->
         <div id="filter-container" class="filter-rectangle">
-            <form action="getInstructors" method="POST">
+            <form id="get-lessons-form">
                 <div class="form-row align-items-center">
                     <div class="col-auto">
                         <table>
@@ -57,9 +84,6 @@
                                 </td>
                                 <td>
                                     <label class="sr-only" for="distance">Distance Willing to Travel (mi)</label>
-                                </td>
-                                <td>
-                                    <label class="sr-only" for="rate">Max rate/hr</label>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-primary mb-2 blank-col-on-left" onclick="window.location.href='becomeAnInstructor'">Become an Instructor</button>
@@ -75,9 +99,6 @@
                                 <td>
                                     <input type="number" class="mb-2" id="distance">
                                 </td>
-                                <td>
-                                    <input type="number" class="mb-2" id="rate" placeholder="30">
-                                </td>
                             </tr>
                         </table>
                         <button type="submit" class="btn btn-primary mb-2">Filter</button>
@@ -89,8 +110,22 @@
         
        
         <!-- Kite Surf Lessons -->
-        <div id="kite-surf-lessons-container"></div> 
-
+        <div id="kite-surf-lessons-container">
+            <div class="card border-dark mb-3" style="max-width: 120rem;">
+              <div class="card-header">Header</div>
+              <div class="card-body text-dark">
+                <h5 class="card-title">Dark card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              </div>
+            </div>
+            <div class="card border-dark mb-3" style="max-width: 120rem;">
+              <div class="card-header">Header 2</div>
+              <div class="card-body text-dark">
+                <h5 class="card-title">Dark card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              </div>
+            </div>
+        </div> 
 
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

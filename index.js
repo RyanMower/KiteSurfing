@@ -474,8 +474,13 @@ app.post("/resetPassword", function(req, res) {
 });
 
 // Find Instructors/Lessons that meet the criterion
-app.post("/getInstructors", function(req, res) {
+app.post("/getLessons", function(req, res) {
     console.log("Post to find instructors");
+    var name     = req.body["instructor-name"];
+    var location = req.body["location"];
+    var distance = req.body["distance"];
+
+
 });
 
 // Update Password - POST
