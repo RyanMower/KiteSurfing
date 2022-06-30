@@ -23,14 +23,40 @@
         <script src="js/navbar_scripts.js"></script>
         <script>
             function addCards(data){
-                console.log("HERE");
-                console.log(data);
-                
-
-                // 
+                let container = document.getElementsByClassName("kite-surf-lessons-container")[0];
+                let container_html = "";
+                for (let i = 0; i < data.length; i++){
+                    container_html += createCard(data[i]);
+                }
+                container.innerHTML = container_html; 
             }
+            
+            function deleteLession(id){
+               console.log("Trying to delete lessid id: " + id);
+
+                 $.post('/deleteLesson', 
+                     {id: id}, 
+                     (data) => { 
+                       if (data.status === 'success') { 
+                         window.location.href = '/login'; 
+                       }
+                 }); 
+
+            }
+
             function createCard(data){
-                // REturn card here TODO
+                let html = `
+                    <div class="card border-dark mb-3" style="max-width: 120rem;">
+                        <div class="card-header">${data["fname"]} ${data["lname"]}</div>
+                        <div class="card-body text-dark">
+                            <h5 class="card-title">${data["contact_info"]}</h5>
+                            <p class="card-text">${data["location"]}</p> 
+                            <p class="card-text">${data["pricing"]}</p> 
+                            <button onclick="deleteLession(${data["id"]})" class="btn btn-danger" id="delete-account-submit">Delete Lesson</button> 
+                        </div>
+                  </div>
+                 `
+                return html;
             }
 
            $(document).ready(function () { 
@@ -72,14 +98,6 @@
         </nav>
         <!-- Body -->
         <div class="kite-surf-lessons-container">
-            <div class="card border-dark mb-3" style="max-width: 120rem;">
-              <div class="card-header">Header</div>
-              <div class="card-body text-dark">
-                <h5 class="card-title">Dark card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <button class="btn btn-danger" id="delete-account-submit">Delete Lesson</button>
-              </div>
-            </div>
         </div>
         <!---------->
         <!-- Bootstrap core JS-->

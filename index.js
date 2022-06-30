@@ -163,7 +163,8 @@ app.get('/getMyLessons', function(req, res) {
                         lname: rows[i].user_lname,
                         contact_info: rows[i].contact_info,
                         pricing: rows[i].pricing,
-                        location: rows[i].location
+                        location: rows[i].location,
+                        id: rows[i].id
                     }
                     json_resp["data"].push(new_entry)
                 }
@@ -529,8 +530,29 @@ app.post("/getLessons", function(req, res) {
     var name     = req.body["instructor-name"];
     var location = req.body["location"];
     var distance = req.body["distance"];
+    // TODO
+});
 
-
+// Find Instructors/Lessons that meet the criterion
+app.post("/deleteLesson", function(req, res) {
+    if (!req.session.value){
+        res.redirect(302, "login");
+    }
+    else{
+        var id = req.body["id"];
+        let sql = `
+          DELETE Lessons
+          FROM Lessons
+          INNER JOIN Users
+          ON Users.user_id=Lessons.instructor_id
+          WHERE id=? 
+          AND user_email=?;
+        `
+        connection.query(sql, [id,req.session.email], function(err, rows, results){
+            if (err) {throw err;} 
+            res.json({status: "success"});
+        });
+    } 
 });
 
 // Find Instructors/Lessons that meet the criterion
