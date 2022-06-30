@@ -126,6 +126,8 @@ function launchEditMode(){
     let cancel_btn = document.getElementById("cancel-save-btn");
     cancel_btn.removeAttribute("hidden");
     cancel_btn.addEventListener("click", profile_cancel);
+    let lesson_btn = document.getElementById("lesson-btn");
+    lesson_btn.setAttribute("hidden", true);
 }
 
 window.onload = (event) =>{

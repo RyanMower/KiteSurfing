@@ -119,9 +119,59 @@ app.get('/login', function(req, res) {
 // Login Page
 app.get('/becomeAnInstructor', function(req, res) {
     console.log("Becoming an instructor");
-    res.sendFile(__dirname + '/public/become-instructor.html');
+    if (!req.session.value){
+        res.redirect(302,"login")
+    }
+    else{
+        res.sendFile(__dirname + '/public/become-instructor.html');
+    }
+});
+// Login Page
+app.get('/myLessons', function(req, res) {
+    if (!req.session.value){
+        res.redirect(302,"login")
+    }
+    else{
+        res.sendFile(__dirname + '/public/my-lessons.html');
+    }
 });
 
+// Login Page
+app.get('/getMyLessons', function(req, res) {
+    if (!req.session.value){
+        res.json({status: 'fail'});
+    }
+    else{
+        let sql = `
+         SELECT * FROM Lessons
+         JOIN Users ON Users.user_id = Lessons.instructor_id 
+         WHERE user_email=?;
+         `
+
+        connection.query(sql, [req.session.email], function(err, rows, fields) {
+            // Error Occured
+            console.log(req.session.email);
+            if (err) { res.json({status: 'fail'});}
+            else{
+                let json_resp = {
+                    status:"success",
+                    data: []
+                };
+                for (let i = 0; i< rows.length; i++){
+                    let new_entry = {
+                        fname: rows[i].user_fname,
+                        lname: rows[i].user_lname,
+                        contact_info: rows[i].contact_info,
+                        pricing: rows[i].pricing,
+                        location: rows[i].location
+                    }
+                    json_resp["data"].push(new_entry)
+                }
+                res.json(json_resp);
+            }
+        });
+    }
+});
 // Authenticate 
 app.post("/login", function(req, res) {
     // Authenticate User with Provided Credentials
@@ -481,6 +531,31 @@ app.post("/getLessons", function(req, res) {
     var distance = req.body["distance"];
 
 
+});
+
+// Find Instructors/Lessons that meet the criterion
+app.post("/becomeAnInstructor", function(req, res) {
+    if (!req.session.value){
+        res.redirect(302, "login");
+    }
+
+    connection.query("SELECT user_id FROM Users WHERE user_email=?", [req.session.email], function(err, rows, results){
+        if (err) {throw err;} 
+       
+        user_id = rows[0].user_id;
+        let new_entry = {
+            instructor_id: user_id,
+            contact_info : req.body["contact-info"],
+            location     : req.body["location"],
+            pricing      : req.body["pricing"]
+        }
+        connection.query("INSERT Lessons SET ?;", new_entry, function(err, results){ if (err) {throw err;}});
+        json_resp = {
+            status: "success",
+            availability: 0
+        };
+        res.json(json_resp);
+    });
 });
 
 // Update Password - POST

@@ -21,7 +21,6 @@
         <!-- Dynamically Updates Navbar -->
         <script src="js/jquery.js"></script>
         <script src="js/navbar_scripts.js"></script>
-        <script src="js/create_account.js"></script>
         <script>
            function showFailure(reason){
              console.log("Inside showFailure");
@@ -31,40 +30,31 @@
            }
 
            $(document).ready(function () { 
-             $('#CreateAccount-form').submit(function (event) { 
+             $('#become-instructor-form').submit(function (event) { 
              event.preventDefault(); 
              //collect the form data using Id Selector for whatever data you need 
              //to send to server 
-             let email        = $('#email').val(); 
-             let fname        = $('#first-name').val(); 
-             let lname        = $('#last-name').val(); 
-             let phone_number = $('#phone-number').val(); 
-             let pass1        = $('#password1').val(); 
-             let pass2        = $('#password2').val(); 
+             let pricing = $('#pricing').val(); 
+             let location = $('#location').val(); 
+             let contact_info = $('#contact-info').val(); 
              let post_data = {
-                 "email": email,
-                 "first-name"  : fname,
-                 "last-name"   : lname,
-                 "phone-number": phone_number,
-                 "password1"   : pass1,
-                 "password2"   : pass2
+                 "pricing": pricing,
+                 "location"  : location,
+                 "contact-info"   : contact_info
              }
-             console.log("Trying to post");
-             $.post('/createAccount', 
+             console.log("POSTING TO become an instructor");
+             $.post('/becomeAnInstructor', 
                post_data, 
                  (data) => { 
                    if (data.status === 'success') { 
-                     window.location.href = '/login'; 
+                     window.location.href = 'surfing-lessons'; 
                    }
-                   else { 
-                     if (data.reason === "email-exists"){
-                       window.location.href = '/resetPassword'; 
-                       return;
+                     else{
+                         // SHOW FAILURE HERE
+                         //showFailuer();
+                         //TODO
+                         return
                      }
-                     console.log("Calling showFailure");
-                     //Display error message 
-                     showFailure(data.reason);
-                   } 
                  }); 
              }); 
            });
@@ -100,43 +90,21 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                     <div class="col-lg-6">
                         <div id="alert-element"></div>
-                        <form id="CreateAccount-form" >
-                            <!-- Email address input-->
-                            <label for="email"><b>Email Address</b></label>
-                            <input name="email" class="form-control" id="email" type="email" placeholder="john@domain.com" required>
+                        <form id="become-instructor-form" >
+                            <!-- Contact Information-->
+                            <label for="contact-info"><b>Contact Information</b></label>
+                            <textarea rows="4" cols="50" name="contact-info" class="form-control" id="contact-info" type="text" placeholder="Phone: 123-456-7890, email: janedoe@domain.com" required></textarea>
                             <br>
-                            <!-- First Name -->
-                            <label for="first-name"><b>First Name</b></label>
-                            <input name="first-name" class="form-control" id="first-name" type="text" placeholder="John" required>
+                            <!-- Location -->
+                            <label for="location"><b>Location</b></label>
+                            <input name="location" class="form-control" id="location" type="text" required>
                             <br>
-                            <!-- Last Name -->
-                            <label for="last-name"><b>Last Name</b></label>
-                            <input name="last-name" class="form-control" id="last-name" type="text" placeholder="Doe" required>
+                            <!-- Pricing -->
+                            <label for="pricing"><b>Pricing</b></label>
+                            <textarea rows="4" cols="50" name="pricing" class="form-control" id="pricing" type="text" placeholder="Description of pricing. Ex. $50/session, $45/hr, etc..." required></textarea>
                             <br>
-                            <!-- Phone Number-->
-                            <label for="phone-number"><b>Phone Number</b></label>
-                            <input name="phone-number" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" title="Ex. 123-456-7890" id="phone-number" type="tel" placeholder="123-456-7890" required>
-                            <br>
-                            <!-- Password input 1-->
-                            <label for="password1">Password</label>
-                            <input name="password1" class="form-control password-input" id="password1" type="password" placeholder="Password" required></textarea>
-                            <br>
-                            <!-- Password input 2-->
-                            <label for="password2">Re-type Password</label>
-                            <input name="password2" class="form-control password-input" id="password2" type="password" placeholder="Password" required></textarea>
-                            <br>
-                            <div id="info-alert-password" class="alert alert-info" hidden>
-                                Password must include:
-                                <ul>
-                                    <li>10 characters</li>
-                                    <li>1 number</li>
-                                    <li>1 symbol from ~`!@#$%^&*()_-+={[}]|:;<,>.?</li>
-                                    <li>Passwords must match</li>
-                                </ul>
-                            </div>
-                            <div id="server-password-err" hidden></div>
                             <!-- Submit Button -->
-                            <button class="btn btn-primary" type="submit">Create Account</button>
+                            <button class="btn btn-primary" type="submit">Submit</button>
                         </form>
                     </div>
                 </div>
