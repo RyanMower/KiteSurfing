@@ -22,29 +22,89 @@
         <script src="js/jquery.js"></script>
         <script src="js/navbar_scripts.js"></script>
        <script>
+            function addCards(data){
+                let container = document.getElementsByClassName("kite-surf-lessons-container")[0];
+                let container_html = "";
+                for (let i = 0; i < data.length; i++){
+                    container_html += createCard(data[i]);
+                }
+                container.innerHTML = container_html; 
+            }
+            
+            function deleteLession(id){
+               console.log("Trying to delete lessid id: " + id);
+
+                 $.post('/deleteLesson', 
+                     {id: id}, 
+                     (data) => { 
+                       if (data.status === 'success') { 
+                         window.location.href = '/login'; 
+                       }
+                 }); 
+
+            }
+
+            function createCard(data){
+                let html = `
+                    <div class="card border-dark mb-3" style="max-width: 120rem;">
+                        <div class="card-header">${data["fname"]} ${data["lname"]}</div>
+                        <div class="card-body text-dark">
+                            <h5 class="card-title">${data["contact_info"]}</h5>
+                            <p class="card-text">${data["location"]}</p> 
+                            <p class="card-text">${data["pricing"]}</p> 
+                            <div hidden>${data["id"]}</div>
+                        </div>
+                  </div>
+                 `
+                return html;
+            }
            $(document).ready(function () { 
-             $('#get-lessons-form').submit(function (event) { 
-             event.preventDefault(); 
-             //collect the form data using Id Selector for whatever data you need 
-             //to send to server 
              let instr_name    = $('#instructor-name').val(); 
              let location      = $('#location').val(); 
              let distance      = $('#distance').val(); 
              let post_data  = {
                  "instructor-name"  : instr_name,
                  "location"   : location,
-                 "distance": distance,
-                 "rate"   : rate
+                 "distance": distance
              }
-             console.log("Getting lessons");
+             console.log("Getting lessons load");
              $.post('/getLessons', 
                post_data, 
                  (data) => { 
                    if (data.status === 'success') { 
-                        // Create Lesson cards here TODO 
-                       console.log("CREATE LEsson cards here");
+                       addCards(data.data);
                    }
                  }); 
+             $('#get-lessons-form').submit(function (event) { 
+                 event.preventDefault(); 
+                 //collect the form data using Id Selector for whatever data you need 
+                 //to send to server 
+                 let instr_name    = $('#instructor-name').val(); 
+                 let location      = $('#location').val(); 
+                 let distance      = $('#distance').val(); 
+                 let post_data  = {
+                     "instructor-name"  : instr_name,
+                     "location"   : location,
+                     "distance": distance
+                 }
+                 console.log("Getting lessons");
+                 $.post('/getLessons', 
+                   post_data, 
+                     (data) => { 
+                       if (data.status === 'success') { 
+                           let lessons = [];
+                           for (let i = 0; i < data.data.length; i++){
+                               let flag = false;
+                                if (data["data"][i].fname.toLowerCase().includes(instr_name.toLowerCase()) ||
+                                    data["data"][i].lname.toLowerCase().includes(instr_name.toLowerCase())
+                                ){ flag = true; }
+                               if (flag){
+                                   lessons.push(data["data"][i])
+                               }
+                           }
+                           addCards(lessons);
+                       }
+                     }); 
              }); 
            });
         </script>
@@ -111,20 +171,6 @@
        
         <!-- Kite Surf Lessons -->
         <div class="kite-surf-lessons-container">
-            <div class="card border-dark mb-3" style="max-width: 120rem;">
-              <div class="card-header">Header</div>
-              <div class="card-body text-dark">
-                <h5 class="card-title">Dark card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              </div>
-            </div>
-            <div class="card border-dark mb-3" style="max-width: 120rem;">
-              <div class="card-header">Header 2</div>
-              <div class="card-body text-dark">
-                <h5 class="card-title">Dark card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              </div>
-            </div>
         </div> 
 
         <!-- Bootstrap core JS-->

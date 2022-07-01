@@ -530,7 +530,33 @@ app.post("/getLessons", function(req, res) {
     var name     = req.body["instructor-name"];
     var location = req.body["location"];
     var distance = req.body["distance"];
-    // TODO
+   
+    // Grabbing all lessons at the moment
+    let sql = `
+     SELECT * FROM Lessons
+     JOIN Users ON Users.user_id = Lessons.instructor_id;
+     `
+    connection.query(sql, function(err, rows, fields) {
+        if (err) { throw err; }
+
+        // Create Json Response
+        let json_resp = {
+            status: "success",
+            data: []
+        };
+        for (let i = 0; i < rows.length; i++){
+            let lesson = {
+                id: rows[i].instructor_id,
+                contact_info : rows[i].contact_info,
+                location     : rows[i].location,
+                pricing      : rows[i].pricing,
+                fname        : rows[i].user_fname,
+                lname        : rows[i].user_lname
+            };
+            json_resp["data"].push(lesson);
+        }
+        res.json(json_resp);
+    });
 });
 
 // Find Instructors/Lessons that meet the criterion
