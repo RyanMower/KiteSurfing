@@ -16,8 +16,12 @@ function App() {
     </Router>
     */
   return (
-    <Router>
+    <Router> 
       <div className="App">
+        <Navbar/>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+        </Routes>
       </div>
     </Router>
   );
