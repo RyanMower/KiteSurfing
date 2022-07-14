@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Navbar() {
   const navStyle = {
-    color: 'white'
+    color: 'black'
   };
 
   return (
