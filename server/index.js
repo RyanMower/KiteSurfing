@@ -648,8 +648,6 @@ app.get("/getLoggedInUser", function(req, res) {
       json_resp["email"] = "";
   }
   // Send JSON to client
-  console.log("SENDING LOGGED IN USER");
-  console.log(json_resp);
   res.json(json_resp);
 });
 
