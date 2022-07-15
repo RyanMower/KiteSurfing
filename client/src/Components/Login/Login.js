@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Navigate } from 'react-router-dom';
 import "../../Assets/Styles/Login.css";
 
-function Login() {
+function Login(props) {
 
   // React States
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
 
   const errors = {
     credentials: "Invalid Credentials",
@@ -34,8 +33,7 @@ function Login() {
       .then(resp => resp.json())
       .then(data => {
         if(data.status === "success"){
-          console.log(data.status);
-          setLoggedIn(true);
+          props.setIsLoggedIn(true);
         }else{
           setIsSubmitted(true);
         }})
@@ -63,21 +61,10 @@ function Login() {
   );
   
 
-  useEffect(() => {      
-    fetch("/getLoggedInUser")
-      .then(resp => resp.json())
-      .then(data => {
-        if (data["email"] != ""){
-          setLoggedIn(false);
-        }
-      })
-      .catch(err => console.log(err));
-
-  }, []);
 
   let display;
 
-  if(loggedIn){
+  if(props.isLoggedIn){
     display = <Navigate to="/" /> 
   }
   else{

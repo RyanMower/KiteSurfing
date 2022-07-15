@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-function Navbar() {
+function Navbar(props) {
+  //console.log(props.isLoggedIn);
   const navStyle = {
     color: 'black'
   };
@@ -11,7 +12,8 @@ function Navbar() {
     email: "",
   });
 
-  useEffect(() => {      
+  var loginProfile;
+  if (props.isLoggedIn){
     fetch("/getLoggedInUser")
       .then(resp => resp.json())
       .then(data => {
@@ -19,15 +21,10 @@ function Navbar() {
       })
       .catch(err => console.log(err));
 
-  }, []);
-
-  var loginProfile;
-
-  if (LoggedInUser["email"] == ""){
-    loginProfile = <Link style={navStyle} to="/login"><li> Login </li></Link>
+    loginProfile = <Link style={navStyle} to="/profile"><li> Hello, {LoggedInUser["user"]}</li></Link>
   }
   else{
-    loginProfile = <Link style={navStyle} to="/profile"><li> Hello, {LoggedInUser["user"]}</li></Link>
+    loginProfile = <Link style={navStyle} to="/login"><li> Login </li></Link>
   }
 
   return (
