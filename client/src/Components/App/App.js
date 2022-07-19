@@ -23,7 +23,7 @@ function App() {
           <Route path="/SurfingLocations" exact element={<SurfingLocations/>} />
           <Route path="/SurfingLessons" exact element={<SurfingLessons/>} />
           <Route path="/login" exact element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/profile" exact element={<Profile/>} /> 
+          <Route path="/profile" exact element={<Profile isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>} /> 
         </Routes>
       </div>
     </Router>
