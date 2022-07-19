@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 function Navbar(props) {
-  //console.log(props.isLoggedIn);
   const navStyle = {
     color: 'black'
   };
 
-  const [LoggedInUser, setLoggedInUser] = useState({
+  let LoggedInUser = {
     user: "",
-    email: "",
-  });
+    email: ""
+  };
 
-  var loginProfile;
-  if (props.isLoggedIn){
-    fetch("/getLoggedInUser")
-      .then(resp => resp.json())
-      .then(data => {
-        setLoggedInUser(data);
-      })
-      .catch(err => console.log(err));
 
-    loginProfile = <Link style={navStyle} to="/profile"><li> Hello, {LoggedInUser["user"]}</li></Link>
-  }
-  else{
-    loginProfile = <Link style={navStyle} to="/login"><li> Login </li></Link>
-  }
+  const [loginProfile, setLoggedInProfile] = useState();
+ 
+  useEffect(() => {
+    if (props.isLoggedIn){
+      fetch("/getLoggedInUser")
+        .then(resp => resp.json())
+        .then(data => {
+          LoggedInUser = data;
+          setLoggedInProfile(<Link style={navStyle} to="/profile"><li> Hello, {LoggedInUser["user"]}</li></Link>);
+        })
+        .catch(err => console.log(err));
+
+    }
+    else{
+      setLoggedInProfile(<Link style={navStyle} to="/login"><li> Login </li></Link>);
+    }
+  
+  }, [props.isLoggedIn]);
 
   return (
     <div className="Navbar">

@@ -5,14 +5,13 @@ import Home from '../Home/Home';
 import SurfingLocations from '../SurfingLocations/SurfingLocations';
 import SurfingLessons from '../SurfingLessons/SurfingLessons';
 import Login from '../Login/Login';
+import Profile from '../Profile/Profile';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 function App() {
   
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  console.log(isLoggedIn);
-
 
   return (
     <Router> 
@@ -24,6 +23,7 @@ function App() {
           <Route path="/SurfingLocations" exact element={<SurfingLocations/>} />
           <Route path="/SurfingLessons" exact element={<SurfingLessons/>} />
           <Route path="/login" exact element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/profile" exact element={<Profile/>} /> 
         </Routes>
       </div>
     </Router>
