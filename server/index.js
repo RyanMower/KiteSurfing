@@ -232,6 +232,7 @@ app.post("/login", function(req, res) {
 // Delete Account 
 app.post("/deleteAccount", function(req, res) {
     // Authenticate User with Provided Credentials
+    console.log(req.body);
     let email = req.body['email'];
     let password = req.body['password'];
     let sql = "SELECT user_pass_hash FROM Users WHERE user_email=?;"
@@ -246,6 +247,7 @@ app.post("/deleteAccount", function(req, res) {
             connection.query(delete_sql, [email], function(err, rows, fields){
                 if (err) {
                     res.json({status: 'fail'});
+                    return;
                 }
                 req.session.destroy();
                 res.json({status: "success"}); // User successfully deleted
@@ -297,6 +299,7 @@ app.post("/updateAccount", function(req, res) {
           status: 'fail',
           reason: "Invalid Input" 
         });
+        return;
     }
     
     // Make sure email not attached to existing account

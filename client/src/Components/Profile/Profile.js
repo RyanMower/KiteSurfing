@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 function Profile() {
   const navigate = useNavigate();
   const [editView, setEditView] = useState(false);
-  const [page, setPage] = useState();
   const [data, setData] = useState({
     email: "",
     fname: "",
     lname: "",
     number: "",
+    deleteAccount: false,
+    password: "",
   });
 
   function logout(){
@@ -27,10 +28,49 @@ function Profile() {
       });
 
   }
+  function deleteAccount(){
+    setData({
+     ...data,
+     deleteAccount: true,
+   });
+  }
+  function deleteAccountSubmit(){
+    fetch("/deleteAccount",{
+      method: "POST",
+      body: JSON.stringify({
+        email: data["email"],
+        password: data["password"],
+      }),
+      headers: {"Content-Type": "application/json"},
+    }) 
+      .then(resp => resp.json())
+      .then(data => {
+        console.log("Account Deleted");
+        console.log(data); 
+      })
+      .catch(err => console.log(err));
 
-  function handleSubmit(){
+  }
+
+  function handleSubmit(event){
+    event.preventDefault();
     // SUVMIT DATA TO BACKEND HERE
-    // TODO
+    fetch("/updateAccount",{
+      method: "POST",
+      body: JSON.stringify({
+        email: data["email"],
+        "first-name": data["fname"],
+        "last-name": data["lname"],
+        "phone-number": data["number"],
+      }),
+      headers: {"Content-Type": "application/json"},
+    }) 
+      .then(resp => resp.json())
+      .then(data => {
+        console.log("Profile Updated");
+        console.log(data); 
+      })
+      .catch(err => console.log(err));
 
   }
 
@@ -53,6 +93,13 @@ function Profile() {
     setData({
      ...data,
      number: event.target.value
+   });
+  }
+
+  function handleChangePasswordDeleteConfirm(event) {
+    setData({
+     ...data,
+     password: event.target.value
    });
   }
 
@@ -109,9 +156,21 @@ function Profile() {
             <input type="text" value={data["number"]} onChange={handleChangeNumber}/>
             </label>
           </div>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Update Account" />
         </form>
-        <Button onClick={toggleProfileEditor}>Edit profile</Button>
+        <Button onClick={toggleProfileEditor}>Cancel</Button>
+        {data["deleteAccount"] ? 
+          <>
+          <Button onClick={deleteAccountSubmit}>Delete Account</Button>
+          <div>
+            <label>
+            Re-Enter Password:
+            <input type="text" defaultValue="" onChange={handleChangePasswordDeleteConfirm}/>
+            </label>
+          </div>
+          </>
+          :
+        <Button onClick={deleteAccount}>Delete Account</Button> }
       </div>
 
     );
