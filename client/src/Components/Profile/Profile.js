@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 
-function Profile() {
+function Profile(props) {
   const navigate = useNavigate();
   const [editView, setEditView] = useState(false);
   const [data, setData] = useState({
@@ -15,19 +15,24 @@ function Profile() {
     password: "",
   });
 
-  function logout(){
+  function logout(props){
+   return function() {
     fetch("/logout", {
       method: "GET",
     })
-      .then(
-        navigate("/")
-      )
+      .then(() => {
+        navigate("/");
+        props.setIsLoggedIn(false);
+      })
       .catch(err => {
         console.log(err);
         navigate("/");
+        props.setIsLoggedIn(false);
       });
 
-  }
+   };
+}
+
   function deleteAccount(){
     setData({
      ...data,
@@ -118,7 +123,9 @@ function Profile() {
               number: data["user_phone"],
           };
           setData(ret_data);
-
+        }
+        else{
+          navigate("/");
         }
         })
       .catch(err => console.log(err));
@@ -212,7 +219,7 @@ function Profile() {
           </Col>
         </Row>
       </Container>
-      <Button onClick={logout}>Logout</Button>
+      <Button onClick={logout(props)}>Logout</Button>
       <Button onClick={toggleProfileEditor}>Edit profile</Button>
       </div> 
     );

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from 'react-router-dom';
 import "../../Assets/Styles/Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
+  const navigate = useNavigate();
 
   // React States
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -39,6 +41,18 @@ function Login(props) {
         }})
       .catch(err => console.log(err));
   };
+
+  useEffect(() => {
+    fetch("/getLoggedInUser")
+      .then(resp => resp.json())
+      .then(data => {
+        if (data["email"] !== ""){
+          navigate("/");
+        }
+      })
+      .catch(err => console.log(err));
+  }, [props.isLoggedIn]);
+  
 
   // JSX code for login form
   const renderForm = (
