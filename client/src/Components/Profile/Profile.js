@@ -39,7 +39,8 @@ function Profile(props) {
      deleteAccount: true,
    });
   }
-  function deleteAccountSubmit(){
+  function deleteAccountSubmit(props){
+   return function() {
     fetch("/deleteAccount",{
       method: "POST",
       body: JSON.stringify({
@@ -51,10 +52,11 @@ function Profile(props) {
       .then(resp => resp.json())
       .then(data => {
         console.log("Account Deleted");
-        console.log(data); 
+        props.setIsLoggedIn(false);
+        navigate("/");
       })
       .catch(err => console.log(err));
-
+    }
   }
 
   function handleSubmit(event){
@@ -168,7 +170,7 @@ function Profile(props) {
         <Button onClick={toggleProfileEditor}>Cancel</Button>
         {data["deleteAccount"] ? 
           <>
-          <Button onClick={deleteAccountSubmit}>Delete Account</Button>
+          <Button onClick={deleteAccountSubmit(props)}>Delete Account</Button>
           <div>
             <label>
             Re-Enter Password:
