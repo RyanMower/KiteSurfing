@@ -238,18 +238,20 @@ app.post("/deleteAccount", function(req, res) {
     connection.query(sql, [email], function(err, rows, fields) {
         // Error Occured
         if (err) {
-            res.json({status: 'fail'});
+            res.json({status: 'fail1', msg: err});
             return;
         }
         if (bcrypt.compareSync(password, rows[0].user_pass_hash)){
-            let delete_sql = "DELETE FROM Users WHERE user_email=?;" ;
+            delete_sql = "DELETE FROM Users WHERE user_email=?;" ;
             connection.query(delete_sql, [email], function(err, rows, fields){
                 if (err) {
-                    res.json({status: 'fail'});
+                    res.json({status: 'fail3', msg: err});
+                    return;
                 }
                 req.session.destroy();
                 res.json({status: "success"}); // User successfully deleted
             });
+
         }else{
             res.json({
                 status: 'fail',
@@ -297,6 +299,7 @@ app.post("/updateAccount", function(req, res) {
           status: 'fail',
           reason: "Invalid Input" 
         });
+        return;
     }
     
     // Make sure email not attached to existing account

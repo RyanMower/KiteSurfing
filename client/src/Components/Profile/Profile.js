@@ -3,34 +3,81 @@ import React, { useState, useEffect } from "react";
 import { Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 
-function Profile() {
+function Profile(props) {
   const navigate = useNavigate();
   const [editView, setEditView] = useState(false);
-  const [page, setPage] = useState();
   const [data, setData] = useState({
     email: "",
     fname: "",
     lname: "",
     number: "",
+    deleteAccount: false,
+    password: "",
   });
 
-  function logout(){
+  function logout(props){
+   return function() {
     fetch("/logout", {
       method: "GET",
     })
-      .then(
-        navigate("/")
-      )
+      .then(() => {
+        navigate("/");
+        props.setIsLoggedIn(false);
+      })
       .catch(err => {
         console.log(err);
         navigate("/");
+        props.setIsLoggedIn(false);
       });
 
+   };
+}
+
+  function deleteAccount(){
+    setData({
+     ...data,
+     deleteAccount: true,
+   });
+  }
+  function deleteAccountSubmit(props){
+   return function() {
+    fetch("/deleteAccount",{
+      method: "POST",
+      body: JSON.stringify({
+        email: data["email"],
+        password: data["password"],
+      }),
+      headers: {"Content-Type": "application/json"},
+    }) 
+      .then(resp => resp.json())
+      .then(data => {
+        console.log("Account Deleted");
+        props.setIsLoggedIn(false);
+        navigate("/");
+      })
+      .catch(err => console.log(err));
+    }
   }
 
-  function handleSubmit(){
+  function handleSubmit(event){
+    event.preventDefault();
     // SUVMIT DATA TO BACKEND HERE
-    // TODO
+    fetch("/updateAccount",{
+      method: "POST",
+      body: JSON.stringify({
+        email: data["email"],
+        "first-name": data["fname"],
+        "last-name": data["lname"],
+        "phone-number": data["number"],
+      }),
+      headers: {"Content-Type": "application/json"},
+    }) 
+      .then(resp => resp.json())
+      .then(data => {
+        console.log("Profile Updated");
+        console.log(data); 
+      })
+      .catch(err => console.log(err));
 
   }
 
@@ -56,6 +103,13 @@ function Profile() {
    });
   }
 
+  function handleChangePasswordDeleteConfirm(event) {
+    setData({
+     ...data,
+     password: event.target.value
+   });
+  }
+
   useEffect(() => {
     fetch("/getLoggedInUserInfo", {
       method: "GET",
@@ -71,7 +125,9 @@ function Profile() {
               number: data["user_phone"],
           };
           setData(ret_data);
-
+        }
+        else{
+          navigate("/");
         }
         })
       .catch(err => console.log(err));
@@ -109,9 +165,21 @@ function Profile() {
             <input type="text" value={data["number"]} onChange={handleChangeNumber}/>
             </label>
           </div>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Update Account" />
         </form>
-        <Button onClick={toggleProfileEditor}>Edit profile</Button>
+        <Button onClick={toggleProfileEditor}>Cancel</Button>
+        {data["deleteAccount"] ? 
+          <>
+          <Button onClick={deleteAccountSubmit(props)}>Delete Account</Button>
+          <div>
+            <label>
+            Re-Enter Password:
+            <input type="text" defaultValue="" onChange={handleChangePasswordDeleteConfirm}/>
+            </label>
+          </div>
+          </>
+          :
+        <Button onClick={deleteAccount}>Delete Account</Button> }
       </div>
 
     );
@@ -153,7 +221,7 @@ function Profile() {
           </Col>
         </Row>
       </Container>
-      <Button onClick={logout}>Logout</Button>
+      <Button onClick={logout(props)}>Logout</Button>
       <Button onClick={toggleProfileEditor}>Edit profile</Button>
       </div> 
     );
