@@ -143,13 +143,13 @@ function CreateAccount(props) {
           <div>
             <label>
             Password:
-            <input type="text" value={data["password1"]} onChange={handleChangePassword1}/>
+            <input type="password" value={data["password1"]} onChange={handleChangePassword1}/>
             </label>
           </div>
           <div>
             <label>
             Re-Enter Password:
-            <input type="text" value={data["password2"]} onChange={handleChangePassword2}/>
+            <input type="password" value={data["password2"]} onChange={handleChangePassword2}/>
             </label>
           </div>
           <input type="submit" value="Create Account" />

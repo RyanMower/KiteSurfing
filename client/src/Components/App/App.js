@@ -7,6 +7,7 @@ import SurfingLessons from '../SurfingLessons/SurfingLessons';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import CreateAccount from '../CreateAccount/CreateAccount';
+import ForgotPassword from '../ForgotPassword/ForgotPassword';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/SurfingLessons" exact element={<SurfingLessons/>} />
           <Route path="/login" exact element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/create-account" exact element={<CreateAccount/>} />
+          <Route path="/forgot-password" exact element={<ForgotPassword/>} />
           <Route path="/profile" exact element={<Profile isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>} /> 
         </Routes>
       </div>

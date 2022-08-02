@@ -480,7 +480,6 @@ app.get('/resetPassword', function(req, res) {
     if (req.query.token && scripts.validateInput(req.query.token, "alpha-numeric")){
         connection.query('SELECT * FROM Users WHERE reset_token=?;', [req.query.token], function(err, results, fields) {
             if (err) throw err;
-            console.log(results.length);
             if (results.length == 1) {
                 res.render("update-password", {
                     token: req.query.token
@@ -499,6 +498,7 @@ app.get('/resetPassword', function(req, res) {
 app.post("/resetPassword", function(req, res) {
     // Authenticate User with Provided Credentials
     let recovery_email = req.body["email"];
+    console.log(recovery_email);
         
     // SQL Validation
     if (!scripts.validateInput(recovery_email, "email")){
@@ -516,6 +516,7 @@ app.post("/resetPassword", function(req, res) {
             // SEND EMAIL HERE
             let token = randtoken.generate(20);
             scripts.sendEmail(recovery_email, token);
+            console.log("TRYING TO SEND EMAIL");
             connection.query('UPDATE Users SET reset_token=? WHERE user_email=?;',[token, results[0].user_email], function(err, result) {
                 if (err) throw err
                 res.redirect(302, "login");
