@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate } from 'react-router-dom';
 import "../../Assets/Styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import { Button} from 'react-bootstrap';
 
 function Login(props) {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ function Login(props) {
         <div>{isSubmitted && renderErrorMessage("credentials")}</div>
         <div className="button-container">
           <input type="submit" value="Submit"/>
+          <Button onClick={() => navigate("/create-account")}>Create Account </Button>
         </div>
       </form>
     </div>
