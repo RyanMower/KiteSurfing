@@ -480,17 +480,17 @@ app.get('/resetPassword', function(req, res) {
     if (req.query.token && scripts.validateInput(req.query.token, "alpha-numeric")){
         connection.query('SELECT * FROM Users WHERE reset_token=?;', [req.query.token], function(err, results, fields) {
             if (err) throw err;
-            if (results.length == 1) {
-                res.render("update-password", {
-                    token: req.query.token
-                });
-            } else {  // Need to get new token (matches existing or doesn't match any existing tokens)
-                res.redirect(302, "resetPassword");
-            }
+            res.json({
+                "status" : "success",
+                "msg" : "Token valid.",
+            })
         });
     }
-    else{// Just loading page
-        res.sendFile(__dirname + '/public/resetPassword.html');
+    else{
+        res.json({
+            "status" : "fail",
+            "msg" : "Token not valid.",
+        })
     }
 });
 
@@ -502,7 +502,10 @@ app.post("/resetPassword", function(req, res) {
         
     // SQL Validation
     if (!scripts.validateInput(recovery_email, "email")){
-        res.redirect(302, "createAccount");
+        res.json({
+            "status" : "fail",
+            "msg" : "Not valid email.",
+        })
         return;
     }
     
@@ -519,11 +522,17 @@ app.post("/resetPassword", function(req, res) {
             console.log("TRYING TO SEND EMAIL");
             connection.query('UPDATE Users SET reset_token=? WHERE user_email=?;',[token, results[0].user_email], function(err, result) {
                 if (err) throw err
-                res.redirect(302, "login");
+                res.json({
+                    "status" : "fail",
+                    "msg" : "Couldn't update user's reset token.",
+                })
             });
         } else {
-            // No account attacked to email, create account
-            res.redirect(302, "createAccount");
+            // No account attached to email, create account
+            res.json({
+                "status" : "fail",
+                "msg" : "Invalid account",
+            })
         }
     });
 });
@@ -617,12 +626,19 @@ app.post("/update-password", function(req, res) {
     let new_password2 = req.body["new-password2"];
     let token = req.body["token"];
     if (!(scripts.isValidPassword(new_password1) && scripts.isValidPassword(new_password2) && (new_password1 == new_password2))) {
-        res.redirect(302, "login");
+        res.json({
+            "status": "fail", 
+            "msg": "Passwords not valid or don't match."
+        });
+        return;
     }
 
     // SQL Validation
     if (!scripts.validateInput(token, "alpha-numeric")){
-        res.redirect(302, "login");
+        res.json({
+            "status": "fail", 
+            "msg": "Invalid token"
+        });
         return;
     }
 
@@ -630,12 +646,15 @@ app.post("/update-password", function(req, res) {
     let salt_rounds = 10;
     let new_pass_hash= bcrypt.hashSync(new_password1, salt_rounds);
 
-    connection.query('UPDATE Users SET user_pass_hash=? WHERE reset_token=?;',[new_pass_hash, token], function(err, result) {
+    connection.query('UPDATE Users SET user_pass_hash=? WHERE reset_token=?;', [new_pass_hash, token], function(err, result) {
         if (err) throw err
         // Nullify token 
         connection.query("UPDATE Users SET reset_token=NULL WHERE reset_token=?;",[token], function(err, result){
-            if (err) throw err
-            res.redirect(302, "login");
+            if (err) throw err;
+            res.json({
+                "status": "success", 
+                "msg": "Password Update Successful"
+            });
         })
     });
 });

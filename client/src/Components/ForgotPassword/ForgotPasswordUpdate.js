@@ -6,63 +6,67 @@ function ForgotPasswordUpdate(props) {
   const { token } = useParams();
 
   const [data, setData] = useState({
-    email: "",
+    password1: "",
+    password2: "",
   });
 
   function handleSubmit(event){
     event.preventDefault();
     // SUBMIT DATA TO BACKEND HERE
-    /*
-    fetch("/resetPassword",{
+    fetch("/update-password",{
       method: "POST",
       body: JSON.stringify({
-        email: data["email"],
+        "new-password1": data["password1"],
+        "new-password2": data["password1"],
+        "token": token,
       }),
       headers: {"Content-Type": "application/json"},
     }) 
       .then(resp => resp.json())
       .then(data => {
-        console.log(data); 
-        //navigate("/login");
-        if (data.status === 'success') { 
+        // Add feedback status message here
+        if (data.status == "success"){
           navigate("/login");
         }
-        else { 
-          if (data.reason === "email-exists"){
-            //navigate("/reset-password");
-            navigate("/");
-            return;
-          }
-          console.log(data.reason);
-        } 
+        else{
+          navigate("/login");
+        }
       })
       .catch(err => console.log(err));
-      */
 
   }
-/*
-  function handleChangeEmail(event) {
+
+  function handleChangePassword1(event) {
      setData({
      ...data,
-     email: event.target.value
+     password1: event.target.value
    });
   }
-  */
+
+  function handleChangePassword2(event) {
+     setData({
+     ...data,
+     password2: event.target.value
+   });
+  }
   return (
     <div className="ForgotPasswordUpdate">
       <h1>Reset Password</h1>
-      <p>{token}</p>
-          {/*
         <form onSubmit={handleSubmit}>
           <div>
             <label>
-            Email:
-            <input type="email" value={data["email"]} onChange={handleChangeEmail}/>
+            New Password:
+            <input type="password" value={data["password1"]} onChange={handleChangePassword1}/>
             </label>
           </div>
-          <input type="submit" value="Send Password Reset Link" />
+          <div>
+            <label>
+            Re-type New Password:
+            <input type="password" value={data["password2"]} onChange={handleChangePassword2}/>
+            </label>
+          </div>
+          <input type="submit" value="Update Password" />
         </form>
-        */}
     </div>
   );
 }

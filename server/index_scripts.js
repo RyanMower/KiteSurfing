@@ -74,6 +74,7 @@ module.exports = {
                 re = new RegExp("^[a-zA-Z0-9]*$");
                 break;
             case "alpha-numeric":
+                //re = new RegExp("[a-zA-Z0-9]*");
                 re = new RegExp("^[a-zA-Z0-9]*$");
                 break;
             case "phone":

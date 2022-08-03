@@ -20,21 +20,7 @@ function ForgotPassword() {
     }) 
       .then(resp => resp.json())
       .then(data => {
-        console.log(data); 
-        //navigate("/login");
-        /*
-        if (data.status === 'success') { 
-          navigate("/login");
-        }
-        else { 
-          if (data.reason === "email-exists"){
-            //navigate("/reset-password");
-            navigate("/");
-            return;
-          }
-          console.log(data.reason);
-        } 
-        */
+        navigate("/login");
       })
       .catch(err => console.log(err));
 
