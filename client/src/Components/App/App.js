@@ -28,7 +28,7 @@ function App() {
           <Route path="/login" exact element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/create-account" exact element={<CreateAccount/>} />
           <Route path="/forgot-password" exact element={<ForgotPassword/>} />
-          <Route path="/forgot-password/a" exact element={<ForgotPasswordUpdate/>} />
+          <Route exact path="/reset-password/:token" element={<ForgotPasswordUpdate/>} />
           <Route path="/profile" exact element={<Profile isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>} /> 
         </Routes>
       </div>

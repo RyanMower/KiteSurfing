@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-function ForgotPasswordUpdate() {
+function ForgotPasswordUpdate(props) {
   const navigate = useNavigate();
-  //const { parms }= useParams();
-  //console.log(parms);
+  const { token } = useParams();
 
   const [data, setData] = useState({
     email: "",
@@ -52,6 +51,7 @@ function ForgotPasswordUpdate() {
   return (
     <div className="ForgotPasswordUpdate">
       <h1>Reset Password</h1>
+      <p>{token}</p>
           {/*
         <form onSubmit={handleSubmit}>
           <div>

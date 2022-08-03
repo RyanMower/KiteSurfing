@@ -45,7 +45,7 @@ module.exports = {
                 pass: json_config["email"]["password"] // Your password
             }
         });
-        let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/forgot-password/?token=' + token + '">link</a> to reset your password</p>';
+        let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/reset-password/' + token + '">link</a> to reset your password</p>';
         console.log(html);
         var mailOptions = {
             from: 'kitesurft@gmail.com',
