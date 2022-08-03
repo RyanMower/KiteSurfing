@@ -1,6 +1,6 @@
 // ===== Globals ======
 const DOMAIN = "http://localhost";
-const PORT  = 9001;
+const PORT  = 3000;
 
 const nodemailer = require("nodemailer");
 const fs = require('fs');
@@ -45,13 +45,13 @@ module.exports = {
                 pass: json_config["email"]["password"] // Your password
             }
         });
-        let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>';
+        let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/forgot-password/?token=' + token + '">link</a> to reset your password</p>';
         console.log(html);
         var mailOptions = {
             from: 'kitesurft@gmail.com',
             to: email,
             subject: 'Reset Password Link - KiteSurf.com',
-            html: '<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/resetPassword?token=' + token + '">link</a> to reset your password</p>'
+            html: html,
         };
      
         mail.sendMail(mailOptions, function(error, info) {

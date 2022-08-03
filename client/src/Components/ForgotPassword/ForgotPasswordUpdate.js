@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function ForgotPassword() {
+function ForgotPasswordUpdate() {
   const navigate = useNavigate();
+  //const { parms }= useParams();
+  //console.log(parms);
 
   const [data, setData] = useState({
     email: "",
@@ -11,6 +13,7 @@ function ForgotPassword() {
   function handleSubmit(event){
     event.preventDefault();
     // SUBMIT DATA TO BACKEND HERE
+    /*
     fetch("/resetPassword",{
       method: "POST",
       body: JSON.stringify({
@@ -22,7 +25,6 @@ function ForgotPassword() {
       .then(data => {
         console.log(data); 
         //navigate("/login");
-        /*
         if (data.status === 'success') { 
           navigate("/login");
         }
@@ -34,22 +36,23 @@ function ForgotPassword() {
           }
           console.log(data.reason);
         } 
-        */
       })
       .catch(err => console.log(err));
+      */
 
   }
-
+/*
   function handleChangeEmail(event) {
      setData({
      ...data,
      email: event.target.value
    });
   }
-
+  */
   return (
-    <div className="ForgotPassword">
+    <div className="ForgotPasswordUpdate">
       <h1>Reset Password</h1>
+          {/*
         <form onSubmit={handleSubmit}>
           <div>
             <label>
@@ -59,8 +62,9 @@ function ForgotPassword() {
           </div>
           <input type="submit" value="Send Password Reset Link" />
         </form>
+        */}
     </div>
   );
 }
 
-export default ForgotPassword;
+export default ForgotPasswordUpdate;
