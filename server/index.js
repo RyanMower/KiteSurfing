@@ -539,7 +539,6 @@ app.post("/resetPassword", function(req, res) {
 
 // Find Instructors/Lessons that meet the criterion
 app.post("/getLessons", function(req, res) {
-    console.log("Post to find instructors");
     var name     = req.body["instructor-name"];
     var location = req.body["location"];
     var distance = req.body["distance"];
@@ -559,7 +558,7 @@ app.post("/getLessons", function(req, res) {
         };
         for (let i = 0; i < rows.length; i++){
             let lesson = {
-                id: rows[i].instructor_id,
+                id           : rows[i].instructor_id,
                 contact_info : rows[i].contact_info,
                 location     : rows[i].location,
                 pricing      : rows[i].pricing,
