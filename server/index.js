@@ -539,9 +539,23 @@ app.post("/resetPassword", function(req, res) {
 
 // Find Instructors/Lessons that meet the criterion
 app.post("/getLessons", function(req, res) {
-    var name     = req.body["instructor-name"];
+    var name     = req.body["name"];
     var location = req.body["location"];
     var distance = req.body["distance"];
+    var price    = req.body["price"];
+
+    function filterOnName(name, result){
+        let parts = name.split(" ");
+        for (let i = 0; i < parts.length; i++){
+            if (result.user_fname.toLowerCase().includes(parts[i].toLowerCase()) || 
+                result.user_lname.toLowerCase().includes(parts[i].toLowerCase())){
+                console.log("Returnign true");
+                return true;
+            }            
+            console.log(i);
+        }
+        return false;
+    }
    
     // Grabbing all lessons at the moment
     let sql = `
@@ -565,7 +579,11 @@ app.post("/getLessons", function(req, res) {
                 fname        : rows[i].user_fname,
                 lname        : rows[i].user_lname
             };
-            json_resp["data"].push(lesson);
+
+            // Filtering on name
+            if (filterOnName(name, rows[i])){
+                json_resp["data"].push(lesson);
+            }
         }
         res.json(json_resp);
     });
