@@ -612,7 +612,6 @@ app.post("/deleteLesson", function(req, res) {
 
 // Find Instructors/Lessons that meet the criterion
 app.post("/becomeAnInstructor", function(req, res) {
-    console.log("REQ Received");
     if (!req.session.value){
         res.json({
             status: "fail",
