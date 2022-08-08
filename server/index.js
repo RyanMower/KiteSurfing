@@ -549,7 +549,6 @@ app.post("/getLessons", function(req, res) {
         for (let i = 0; i < parts.length; i++){
             if (result.user_fname.toLowerCase().includes(parts[i].toLowerCase()) || 
                 result.user_lname.toLowerCase().includes(parts[i].toLowerCase())){
-                console.log("Returnign true");
                 return true;
             }            
             console.log(i);
@@ -613,8 +612,13 @@ app.post("/deleteLesson", function(req, res) {
 
 // Find Instructors/Lessons that meet the criterion
 app.post("/becomeAnInstructor", function(req, res) {
+    console.log("REQ Received");
     if (!req.session.value){
-        res.redirect(302, "login");
+        res.json({
+            status: "fail",
+            msg: "Not Authenticated"
+        });
+        return;
     }
 
     connection.query("SELECT user_id FROM Users WHERE user_email=?", [req.session.email], function(err, rows, results){

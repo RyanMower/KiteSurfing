@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Card from 'react-bootstrap/Card';
+import { Button} from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 function SurfingLessons() {
+  const navigate = useNavigate();
 
   const [lessons, setLessons] = useState([]);
 
@@ -65,6 +68,7 @@ function SurfingLessons() {
             <input type="text" name="distance" />
           </div>
           <input type="submit" value="filter"/>
+          <Button onClick={() => navigate("/become-instructor")}>Become an Instructor</Button>
         </form>
       </div>
       {lessons.map((lesson, index) => (
