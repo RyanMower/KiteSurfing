@@ -52,7 +52,7 @@ function SurfingLessons() {
       <div className="form p-2 bg-light border">
         <form onSubmit={handleSubmit}>
           <div className="input-container bg-light border">
-            <label>Name</label>
+            <label>Contact Info</label>
             <input type="text" name="name" />
           </div>
           <div className="input-container bg-light border">
@@ -73,7 +73,7 @@ function SurfingLessons() {
       </div>
       {lessons.map((lesson, index) => (
         <Card key={index}>
-          <Card.Header className="bg-dark text-white">{lesson["fname"]} {lesson["lname"]}</Card.Header>
+          <Card.Header className="bg-dark text-white">{lesson["contact_info"]} </Card.Header>
           <Card.Body>
             <Card.Title>{lesson["location"]}</Card.Title>
             <Card.Text>
