@@ -26,7 +26,6 @@ function Navbar(props) {
         }
         else{
           setLoggedInProfile(<Link style={navStyle} to="/login"><li> Login </li></Link>);
-          navigate("/login");
         }
       })
       .catch(err => console.log(err));

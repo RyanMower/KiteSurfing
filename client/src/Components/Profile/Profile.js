@@ -174,7 +174,7 @@ function Profile(props) {
           <div>
             <label>
             Re-Enter Password:
-            <input type="text" defaultValue="" onChange={handleChangePasswordDeleteConfirm}/>
+            <input type="password" defaultValue="" onChange={handleChangePasswordDeleteConfirm}/>
             </label>
           </div>
           </>
