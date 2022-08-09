@@ -13,6 +13,46 @@ function CreateAccount(props) {
     password2: "",
   });
 
+  const [validPassError, setValidPassError] = useState(false);
+  const [passMatchError, setPassMatchError] = useState(false);
+
+  const errors = {
+    invalidPass: "<div>Passwords don't meet criterion.\n\tAt least 10 Characters\n\tOne symbol from ~`!@#$%^&*()_-+={[}]|:;<,>.?\n\tOne Number\n\tMust Match",
+    pass_dont_match: "Passwords don't match",
+  };
+
+  const renderErrorMessage = () => {
+    let validPassErrorJSX = (
+      <>
+        <div>Passwords don't meet criterion</div>
+        <ul>
+          <li>At least 10 Characters</li>
+          <li>One Number</li>
+          <li>One symbol from {`~\`!@#$%^&*()_-+={[}]|:;<,>.?`}</li>
+          <li>Password Must Match</li>
+        </ul>
+      </>
+    );
+
+    let matchPassErrorJSX = (
+      <>Passwords Must Match</>
+    );
+
+    let errMsg; 
+    if (passMatchError){
+      console.log("setting Match error");
+      errMsg = (<div className="error">{matchPassErrorJSX}</div>);
+    }
+    else if (validPassError){
+      console.log("setting Valid error");
+      errMsg = (<div className="error">{validPassErrorJSX}</div>);
+    }
+    else{
+      errMsg = (<></>);
+    }
+    return errMsg
+  }
+
 
   function isValidPassword(password){
     let symbol_used = false;
@@ -39,6 +79,18 @@ function CreateAccount(props) {
 
   function handleSubmit(event){
     event.preventDefault();
+    setPassMatchError(false);
+    setValidPassError(false);
+
+    if (data["password1"] !== data["password2"]){
+      setPassMatchError(true);
+      return;
+    }
+
+    if(!(isValidPassword(data["password1"]))){
+      setValidPassError(true);
+      return;
+    }
     // SUBMIT DATA TO BACKEND HERE
     fetch("/createAccount",{
       method: "POST",
@@ -54,7 +106,6 @@ function CreateAccount(props) {
     }) 
       .then(resp => resp.json())
       .then(data => {
-        console.log(data); 
         //navigate("/login");
         if (data.status === 'success') { 
           navigate("/login");
@@ -119,39 +170,40 @@ function CreateAccount(props) {
           <div>
             <label>
             Email:
-            <input type="email" value={data["email"]} onChange={handleChangeEmail}/>
+            <input type="email" value={data["email"]} onChange={handleChangeEmail} requried/>
             </label>
           </div>
           <div>
             <label>
             First Name:
-            <input type="text" value={data["fname"]} onChange={handleChangeFname}/>
+            <input type="text" value={data["fname"]} onChange={handleChangeFname} required/>
             </label>
           </div>
           <div>
             <label>
             Last Name:
-            <input type="text" value={data["lname"]} onChange={handleChangeLname}/>
+            <input type="text" value={data["lname"]} onChange={handleChangeLname} required/>
             </label>
           </div>
           <div>
             <label>
             Phone Number:
-            <input type="tel" value={data["number"]} onChange={handleChangeNumber}/>
+              <input type="tell" value={data["number"]} onChange={handleChangeNumber} required/>
             </label>
           </div>
           <div>
             <label>
             Password:
-            <input type="text" value={data["password1"]} onChange={handleChangePassword1}/>
+            <input type="password" value={data["password1"]} onChange={handleChangePassword1} required/>
             </label>
           </div>
           <div>
             <label>
             Re-Enter Password:
-            <input type="text" value={data["password2"]} onChange={handleChangePassword2}/>
+            <input type="password" value={data["password2"]} onChange={handleChangePassword2} required/>
             </label>
           </div>
+          <div>{renderErrorMessage()}</div>
           <input type="submit" value="Create Account" />
         </form>
       </div>

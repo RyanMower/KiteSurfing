@@ -71,6 +71,7 @@ function Login(props) {
         <div className="button-container">
           <input type="submit" value="Submit"/>
           <Button onClick={() => navigate("/create-account")}>Create Account </Button>
+          <Button onClick={() => navigate("/forgot-password")}>Forgot Password?</Button>
         </div>
       </form>
     </div>
