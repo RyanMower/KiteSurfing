@@ -539,19 +539,24 @@ app.post("/resetPassword", function(req, res) {
 
 // Find Instructors/Lessons that meet the criterion
 app.post("/getLessons", function(req, res) {
-    var name     = req.body["name"];
+    var contact_info = req.body["name"];
     var location = req.body["location"];
     var distance = req.body["distance"];
     var price    = req.body["price"];
 
-    function filterOnName(name, result){
-        let parts = name.split(" ");
+    function filterOnContactInfo(search, result){
+        let parts = search.split(" ");
+        // No Filter yet
+        if (parts.length == 1 && parts[0] === ""){
+            return true; // No filter yet
+        }
         for (let i = 0; i < parts.length; i++){
-            if (result.user_fname.toLowerCase().includes(parts[i].toLowerCase()) || 
-                result.user_lname.toLowerCase().includes(parts[i].toLowerCase())){
-                return true;
-            }            
-            console.log(i);
+            let contact_info_parts = result.contact_info.split(" ");
+            for (let j = 0; j < contact_info_parts.length; j++){
+                if (contact_info_parts[j].toLowerCase().includes(parts[i].toLowerCase())){
+                    return true;
+                }
+            } 
         }
         return false;
     }
@@ -575,12 +580,10 @@ app.post("/getLessons", function(req, res) {
                 contact_info : rows[i].contact_info,
                 location     : rows[i].location,
                 pricing      : rows[i].pricing,
-                fname        : rows[i].user_fname,
-                lname        : rows[i].user_lname
             };
 
             // Filtering on name
-            if (filterOnName(name, rows[i])){
+            if (filterOnContactInfo(contact_info, rows[i])){
                 json_resp["data"].push(lesson);
             }
         }
