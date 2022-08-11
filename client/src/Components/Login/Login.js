@@ -57,7 +57,7 @@ function Login(props) {
 
   // JSX code for login form
   const renderForm = (
-    <div className="form">
+    <div className="login">
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Email</label>
@@ -70,8 +70,11 @@ function Login(props) {
         <div>{isSubmitted && renderErrorMessage("credentials")}</div>
         <div className="button-container">
           <input type="submit" value="Submit"/>
-          <Button onClick={() => navigate("/create-account")}>Create Account </Button>
-          <Button onClick={() => navigate("/forgot-password")}>Forgot Password?</Button>
+        </div>
+        <div className="pt-2">
+          <Button size="sm" onClick={() => navigate("/create-account")}>Create Account </Button>
+          {' '}
+          <Button size="sm" onClick={() => navigate("/forgot-password")}>Forgot Password?</Button>
         </div>
       </form>
     </div>

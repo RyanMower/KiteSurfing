@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import {default as BootNavbar} from 'react-bootstrap/Navbar';
 
 function Navbar(props) {
-  const navigate = useNavigate();
-  const navStyle = {
-    color: 'black'
-  };
 
   let LoggedInUser = {
     user: "",
     email: ""
   };
-
 
   const [loginProfile, setLoggedInProfile] = useState();
  
@@ -22,31 +18,28 @@ function Navbar(props) {
       .then(data => {
         if (data["email"] !== ""){
           LoggedInUser = data;
-          setLoggedInProfile(<Link style={navStyle} to="/profile"><li> Hello, {LoggedInUser["user"]}</li></Link>);
+          setLoggedInProfile(<Nav.Link href="/profile">Hello, {LoggedInUser["user"]}</Nav.Link>);
         }
         else{
-          setLoggedInProfile(<Link style={navStyle} to="/login"><li> Login </li></Link>);
+          setLoggedInProfile(<Nav.Link href="/login">Login</Nav.Link>);
         }
       })
       .catch(err => console.log(err));
   }, [props.isLoggedIn]);
 
   return (
-    <div className="Navbar">
-      <h3> LOGO </h3>
-      <ul className="nav-links" >
-        <Link style={navStyle} to="/">
-          <li> Home </li>
-        </Link>
-        <Link style={navStyle} to="/SurfingLessons">
-          <li> Surfing Lessons</li>
-        </Link>
-        <Link style={navStyle} to="/SurfingLocations">
-          <li> Surfing Locations</li>
-        </Link>
-        {loginProfile}
-
-      </ul>
+    <div className="MyNavbar">
+      <BootNavbar bg="primary" variant="dark">
+        <Container>
+          <BootNavbar.Brand href="#">Logo</BootNavbar.Brand>
+          <Nav className="nav-links">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/SurfingLessons">Surfing Lessons</Nav.Link>
+            <Nav.Link href="/SurfingLocations">Surfing Locations</Nav.Link>
+            {loginProfile}
+          </Nav>
+        </Container>
+      </BootNavbar>
     </div>
   );
 }
