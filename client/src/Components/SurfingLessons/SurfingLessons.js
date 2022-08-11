@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Card from 'react-bootstrap/Card';
 import { Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
+import Form from 'react-bootstrap/Form';
 
 function SurfingLessons() {
   const navigate = useNavigate();
@@ -11,7 +12,11 @@ function SurfingLessons() {
   function handleSubmit(event){
     event.preventDefault();
     // Requery data from server here
-    var { name, location, price, distance } = document.forms[0];
+    //var { name, location, price, distance } = document.forms[0];
+    var { name } = document.forms[0];
+    let location = "";
+    let price = "";
+    let distance = "";
     fetch("/getLessons",{
       method: "POST",
       body: JSON.stringify({
@@ -50,29 +55,21 @@ function SurfingLessons() {
   return (
     <div className="SurfingLessons d-grid gap-3">
       <div className="form p-2 bg-light border">
-        <form onSubmit={handleSubmit}>
-          <div className="input-container bg-light border">
-            <label>Contact Info</label>
-            <input type="text" name="name" />
-          </div>
-          <div className="input-container bg-light border">
-            <label>Location</label>
-            <input type="text" name="location" />
-          </div>
-          <div className="input-container bg-light border">
-            <label>Price</label>
-            <input type="text" name="price" />
-          </div>
-          <div className="input-container bg-light border">
-            <label>Distance Willing to Travel</label>
-            <input type="text" name="distance" />
-          </div>
-          <input type="submit" value="filter"/>
-          <Button onClick={() => navigate("/become-instructor")}>Become an Instructor</Button>
-        </form>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="name">
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" placeholder="John Doe" />
+          </Form.Group>
+          
+          <Button variant="primary" type="submit">
+            Filter 
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => navigate("/become-instructor")}>Become an Instructor</Button>
+        </Form> 
       </div>
       {lessons.map((lesson, index) => (
-        <Card key={index}>
+      <div >
+        <Card style={{ width: '50rem'}} className="mx-auto" key={index}>
           <Card.Header className="bg-dark text-white">{lesson["contact_info"]} </Card.Header>
           <Card.Body>
             <Card.Title>{lesson["location"]}</Card.Title>
@@ -81,6 +78,7 @@ function SurfingLessons() {
             </Card.Text>
           </Card.Body>
         </Card>
+      </div>
       ))}
     </div>
   );
