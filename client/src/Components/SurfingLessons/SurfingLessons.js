@@ -3,6 +3,9 @@ import Card from 'react-bootstrap/Card';
 import { Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function SurfingLessons() {
   const navigate = useNavigate();
@@ -53,33 +56,52 @@ function SurfingLessons() {
 
 
   return (
-    <div className="SurfingLessons d-grid gap-3">
-      <div className="form p-2 bg-light border">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="John Doe" />
-          </Form.Group>
-          
-          <Button variant="primary" type="submit">
-            Filter 
-          </Button>
-          <Button variant="secondary" size="sm" onClick={() => navigate("/become-instructor")}>Become an Instructor</Button>
-        </Form> 
-      </div>
-      {lessons.map((lesson, index) => (
-      <div >
-        <Card style={{ width: '50rem'}} className="mx-auto" key={index}>
-          <Card.Header className="bg-dark text-white">{lesson["contact_info"]} </Card.Header>
-          <Card.Body>
-            <Card.Title>{lesson["location"]}</Card.Title>
-            <Card.Text>
-              {lesson["pricing"]}
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      </div>
-      ))}
+    <div className="SurfingLessons">
+      <Container fluid>
+        <Row>
+          <Col className="pt-3" xs={3}>
+            <div className="form p-2 bg-light border">
+              <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3" controlId="name">
+                    <Row>
+                      <Col>
+                        <Form.Label>Name</Form.Label>
+                      </Col>
+                      <Col>
+                        <Form.Control type="text" placeholder="John Doe" />
+                      </Col>
+                    </Row>
+                  </Form.Group>
+                <Row>
+                  <Col>
+                    <Button style={{ width:"100%" }} size="sm" variant="primary" type="submit">
+                      Filter 
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button style={{ width:"100%" }} variant="secondary" size="sm" onClick={() => navigate("/become-instructor")}>Become an Instructor</Button>
+                  </Col>
+                </Row>
+              </Form> 
+            </div>
+          </Col>
+          <Col>
+            {lessons.map((lesson, index) => (
+            <div className="pt-3">
+              <Card className="mx-auto" key={index}>
+                <Card.Header className="bg-dark text-white">{lesson["contact_info"]} </Card.Header>
+                <Card.Body>
+                  <Card.Title>{lesson["location"]}</Card.Title>
+                  <Card.Text>
+                    {lesson["pricing"]}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
+            ))}
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
