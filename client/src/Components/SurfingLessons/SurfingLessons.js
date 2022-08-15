@@ -89,9 +89,12 @@ function SurfingLessons() {
             {lessons.map((lesson, index) => (
             <div className="pt-3">
               <Card className="mx-auto" key={index}>
-                <Card.Header className="bg-dark text-white">{lesson["contact_info"]} </Card.Header>
+                <Card.Header className="bg-dark text-white">{lesson["fname"]} {lesson["lname"]}</Card.Header>
                 <Card.Body>
-                  <Card.Title>{lesson["location"]}</Card.Title>
+                  <Card.Title>{lesson["contact_info"]}</Card.Title>
+                  <Card.Text>
+                    {lesson["location"]}
+                  </Card.Text>
                   <Card.Text>
                     {lesson["pricing"]}
                   </Card.Text>

@@ -56,7 +56,7 @@ function BecomeInstructor(props) {
         {loggedIn && 
         <form onSubmit={handleSubmit}>
           <div className="input-container bg-light border">
-            <label>Contact Information (Public Name)</label>
+            <label>Contact Information</label>
             <input type="text" name="contactInfo" />
           </div>
           <div className="input-container bg-light border">

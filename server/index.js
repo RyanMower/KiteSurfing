@@ -10,7 +10,6 @@ const url = require('url');
 const path = require('path');
 const bodyparser = require('body-parser'); // helps in extracting the body portion of an incoming request stream
 const randtoken = require('rand-token'); // Used to generate random token used for password reset link
-
 // Scripts used by index.js
 const scripts = require("./index_scripts.js");
 
@@ -539,21 +538,23 @@ app.post("/resetPassword", function(req, res) {
 
 // Find Instructors/Lessons that meet the criterion
 app.post("/getLessons", function(req, res) {
-    var contact_info = req.body["name"];
+    var name     = req.body["name"];
     var location = req.body["location"];
     var distance = req.body["distance"];
     var price    = req.body["price"];
+    //var contact_info = req.body["contact-info"];
+    console.log(name);
 
-    function filterOnContactInfo(search, result){
+    function filterOnName(search, result){
         let parts = search.split(" ");
         // No Filter yet
         if (parts.length == 1 && parts[0] === ""){
             return true; // No filter yet
         }
         for (let i = 0; i < parts.length; i++){
-            let contact_info_parts = result.contact_info.split(" ");
-            for (let j = 0; j < contact_info_parts.length; j++){
-                if (contact_info_parts[j].toLowerCase().includes(parts[i].toLowerCase())){
+            let name_parts = result.name.split(" ");
+            for (let j = 0; j < name_parts.length; j++){
+                if (name_parts[j].toLowerCase().includes(parts[i].toLowerCase())){
                     return true;
                 }
             } 
@@ -580,10 +581,12 @@ app.post("/getLessons", function(req, res) {
                 contact_info : rows[i].contact_info,
                 location     : rows[i].location,
                 pricing      : rows[i].pricing,
+                fname        : rows[i].user_fname,
+                lname        : rows[i].user_lname,
             };
 
             // Filtering on name
-            if (filterOnContactInfo(contact_info, rows[i])){
+            if (filterOnName(name, rows[i])){
                 json_resp["data"].push(lesson);
             }
         }
