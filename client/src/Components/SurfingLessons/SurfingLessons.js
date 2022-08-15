@@ -20,6 +20,7 @@ function SurfingLessons() {
     let location = "";
     let price = "";
     let distance = "";
+    let contact_info = ""
     fetch("/getLessons",{
       method: "POST",
       body: JSON.stringify({
@@ -27,6 +28,7 @@ function SurfingLessons() {
         "location": location.value,
         "price": price.value,
         "distance": distance.value,
+        "contact-info": contact_info.value,
       }),
       headers: {"Content-Type": "application/json"},
     }) 

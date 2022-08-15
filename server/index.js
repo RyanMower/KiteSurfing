@@ -538,26 +538,25 @@ app.post("/resetPassword", function(req, res) {
 
 // Find Instructors/Lessons that meet the criterion
 app.post("/getLessons", function(req, res) {
-    var name     = req.body["name"];
-    var location = req.body["location"];
-    var distance = req.body["distance"];
-    var price    = req.body["price"];
-    //var contact_info = req.body["contact-info"];
-    console.log(name);
+    var name         = req.body["name"];
+    var location     = req.body["location"];
+    var distance     = req.body["distance"];
+    var price        = req.body["price"];
+    var contact_info = req.body["contact-info"];
 
     function filterOnName(search, result){
-        let parts = search.split(" ");
+        let parts = search.split(" "); // Search query parts
+
         // No Filter yet
         if (parts.length == 1 && parts[0] === ""){
             return true; // No filter yet
         }
         for (let i = 0; i < parts.length; i++){
-            let name_parts = result.name.split(" ");
-            for (let j = 0; j < name_parts.length; j++){
-                if (name_parts[j].toLowerCase().includes(parts[i].toLowerCase())){
-                    return true;
-                }
-            } 
+            if (result.user_fname.toLowerCase().includes(parts[i].toLowerCase()) || 
+                result.user_lname.toLowerCase().includes(parts[i].toLowerCase())
+            ){
+                return true;
+            }
         }
         return false;
     }
