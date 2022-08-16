@@ -3,6 +3,10 @@ import { Navigate } from 'react-router-dom';
 import "../../Assets/Styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { Button} from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function Login(props) {
   const navigate = useNavigate();
@@ -23,6 +27,7 @@ function Login(props) {
   const handleSubmit = (event) => {
     //Prevent page reload
     event.preventDefault();
+    console.log("HERE")
 
     var { email, password} = document.forms[0];
 
@@ -58,25 +63,40 @@ function Login(props) {
   // JSX code for login form
   const renderForm = (
     <div className="login">
-      <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <label>Email</label>
-          <input type="text" name="email" required />
-        </div>
-        <div className="input-container">
-          <label>Password </label>
-          <input type="password" name="password" required />
-        </div>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="email">
+          <Row>
+            <Col>
+              <Form.Label>Email</Form.Label>
+            </Col>
+            <Col>
+              <Form.Control type="text" placeholder="john@gmail.com" />
+            </Col>
+          </Row>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="password">
+          <Row>
+            <Col>
+              <Form.Label>Password</Form.Label>
+            </Col>
+            <Col>
+              <Form.Control type="password" />
+            </Col>
+          </Row>
+        </Form.Group>
         <div>{isSubmitted && renderErrorMessage("credentials")}</div>
-        <div className="button-container">
-          <input type="submit" value="Submit"/>
-        </div>
-        <div className="pt-2">
-          <Button size="sm" onClick={() => navigate("/create-account")}>Create Account </Button>
-          {' '}
-          <Button size="sm" onClick={() => navigate("/forgot-password")}>Forgot Password?</Button>
-        </div>
-      </form>
+        <Button  style={{ width: "50%" }}size="sm" variant="primary" type="Submit">
+            Submit 
+          </Button>
+        <Row className="pt-2">
+          <Col >
+            <Button size="sm" variant="secondary" onClick={() => navigate("/create-account")}>Create Account </Button>
+          </Col>
+          <Col>
+            <Button size="sm" variant="secondary" onClick={() => navigate("/forgot-password")}>Forgot Password?</Button>
+          </Col>
+        </Row>
+      </Form> 
     </div>
   );
   
