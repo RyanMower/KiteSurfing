@@ -27,7 +27,6 @@ function Login(props) {
   const handleSubmit = (event) => {
     //Prevent page reload
     event.preventDefault();
-    console.log("HERE")
 
     var { email, password} = document.forms[0];
 

@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { Button} from 'react-bootstrap';
+import IntlTelInput from 'react-bootstrap-intl-tel-input'
 
 
 function CreateAccount(props) {
   const navigate = useNavigate();
-  const [data, setData] = useState({
-    email: "",
-    fname: "",
-    lname: "",
-    number: "",
-    password1: "",
-    password2: "",
-  });
 
   const [validPassError, setValidPassError] = useState(false);
   const [passMatchError, setPassMatchError] = useState(false);
@@ -81,13 +79,21 @@ function CreateAccount(props) {
     event.preventDefault();
     setPassMatchError(false);
     setValidPassError(false);
-
-    if (data["password1"] !== data["password2"]){
+    var { email, fname, lname, number, pass1, pass2} = document.forms[0];
+    console.log(email.value);
+    console.log(fname.value);
+    console.log(lname.value);
+    console.log(number.value);
+    console.log(pass1.value);
+    console.log(pass2.value);
+     
+    if (pass1.value !== pass2.value){
+      console.log("HERE");
       setPassMatchError(true);
       return;
     }
 
-    if(!(isValidPassword(data["password1"]))){
+    if(!(isValidPassword(pass1.value))){
       setValidPassError(true);
       return;
     }
@@ -95,12 +101,12 @@ function CreateAccount(props) {
     fetch("/createAccount",{
       method: "POST",
       body: JSON.stringify({
-        email: data["email"],
-        "first-name": data["fname"],
-        "last-name": data["lname"],
-        "phone-number": data["number"],
-        "password1": data["password1"],
-        "password2": data["password2"],
+        email: email,
+        "first-name": fname.value,
+        "last-name": lname.value,
+        "phone-number": number.value,
+        "password1": pass1.value,
+        "password2": pass2.value,
       }),
       headers: {"Content-Type": "application/json"},
     }) 
@@ -122,90 +128,86 @@ function CreateAccount(props) {
       .catch(err => console.log(err));
 
   }
-  function handleChangeEmail(event) {
-     setData({
-     ...data,
-     email: event.target.value
-   });
-  }
-
-  function handleChangeFname(event) {
-     setData({
-     ...data,
-     fname: event.target.value
-   });
-  }
-  function handleChangeLname(event) {
-    setData({
-     ...data,
-     lname: event.target.value
-   });
-  }
-  function handleChangeNumber(event) {
-    setData({
-     ...data,
-     number: event.target.value
-   });
-  }
-  function handleChangePassword1(event) {
-    setData({
-     ...data,
-     password1: event.target.value
-   });
-  }
-  function handleChangePassword2(event) {
-    setData({
-     ...data,
-     password2: event.target.value
-   });
-  }
-
-  useEffect(() => {
-  }, []);
-
 
     return (
       <div className="CreateAccount">
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>
-            Email:
-            <input type="email" value={data["email"]} onChange={handleChangeEmail} requried/>
-            </label>
-          </div>
-          <div>
-            <label>
-            First Name:
-            <input type="text" value={data["fname"]} onChange={handleChangeFname} required/>
-            </label>
-          </div>
-          <div>
-            <label>
-            Last Name:
-            <input type="text" value={data["lname"]} onChange={handleChangeLname} required/>
-            </label>
-          </div>
-          <div>
-            <label>
-            Phone Number:
-              <input type="tell" value={data["number"]} onChange={handleChangeNumber} required/>
-            </label>
-          </div>
-          <div>
-            <label>
-            Password:
-            <input type="password" value={data["password1"]} onChange={handleChangePassword1} required/>
-            </label>
-          </div>
-          <div>
-            <label>
-            Re-Enter Password:
-            <input type="password" value={data["password2"]} onChange={handleChangePassword2} required/>
-            </label>
-          </div>
-          <div>{renderErrorMessage()}</div>
-          <input type="submit" value="Create Account" />
-        </form>
+        <div style={{ width: "50%" }} className="p-2 bg-light border">
+          <Container fluid>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="email">
+                <Row>
+                  <Col>
+                    <Form.Label>Email</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="email" placeholder="john@gmail.com" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="fname">
+                <Row>
+                  <Col>
+                    <Form.Label>First Name</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="text" placeholder="John" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="lname">
+                <Row>
+                  <Col>
+                    <Form.Label>Last Name</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="text" placeholder="Doe" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="number">
+                <Row>
+                  <Col>
+                    <Form.Label>Phone Number</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="tel" placeholder="123-456-7890" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group>
+                <IntlTelInput
+                  preferredCountries={['US']}
+                  defaultCountry={'US'}
+                  defaultValue={'+1 555-555-5555'}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="pass1">
+                <Row>
+                  <Col>
+                    <Form.Label>Password</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="password" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="pass2">
+                <Row>
+                  <Col>
+                    <Form.Label>Re-Enter Password</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="password" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <div>{renderErrorMessage()}</div>
+              <Button size="sm" variant="primary" type="Submit">
+                Create Account 
+              </Button>
+            </Form> 
+          </Container>
+        </div>
       </div>
 
     );
