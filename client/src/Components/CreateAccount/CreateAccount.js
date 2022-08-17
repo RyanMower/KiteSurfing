@@ -5,7 +5,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Button} from 'react-bootstrap';
-import IntlTelInput from 'react-bootstrap-intl-tel-input'
 
 
 function CreateAccount(props) {
@@ -173,13 +172,6 @@ function CreateAccount(props) {
                     <Form.Control type="tel" placeholder="123-456-7890" required />
                   </Col>
                 </Row>
-              </Form.Group>
-              <Form.Group>
-                <IntlTelInput
-                  preferredCountries={['US']}
-                  defaultCountry={'US'}
-                  defaultValue={'+1 555-555-5555'}
-                />
               </Form.Group>
               <Form.Group className="mb-3" controlId="pass1">
                 <Row>
