@@ -23,17 +23,11 @@ function CreateAccount(props) {
     let validPassErrorJSX = (
       <>
         <div className="pb-2">Passwords don't meet criterion</div>
-        <ListGroup 
-          style={{
-            textAlign: "left", 
-            width: "75%", 
-            display: "flex",
-            justifyContent: "center",
-          }} as="ol" numbered>
-            <ListGroup.Item variant="info">At least 10 characters</ListGroup.Item>
-            <ListGroup.Item variant="info">One number</ListGroup.Item>
-            <ListGroup.Item variant="info">One symbol from {`~\`!@#$%^&*()_-+={[}]|:;<,>.?`}</ListGroup.Item>
-            <ListGroup.Item variant="info">Passwords must match</ListGroup.Item>
+        <ListGroup className="pb-3" as="ol" numbered>
+          <ListGroup.Item style={{textAlign: "left"}} variant="info">At least 10 characters</ListGroup.Item>
+          <ListGroup.Item style={{textAlign: "left"}} variant="info">One number</ListGroup.Item>
+          <ListGroup.Item style={{textAlign: "left"}} variant="info">One symbol from {`~\`!@#$%^&*()_-+={[}]|:;<,>.?`}</ListGroup.Item>
+          <ListGroup.Item style={{textAlign: "left"}} variant="info">Passwords must match</ListGroup.Item>
         </ListGroup>
       </>
     );
@@ -132,17 +126,17 @@ function CreateAccount(props) {
   }
 
     return (
-      <div className="CreateAccount">
-        <div 
-          style={{
-            width: "50%",
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          className="p-2 bg-light border">
+      <div 
+        className="CreateAccount"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ width: "50%" }} className="p-3 bg-light border">
           <Container fluid>
-            <Form onSubmit={handleSubmit}>
+            <Form className="text-center" onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="email">
                 <Row>
                   <Col>
@@ -179,7 +173,7 @@ function CreateAccount(props) {
                     <Form.Label>Phone Number</Form.Label>
                   </Col>
                   <Col>
-                    <Form.Control type="tel" placeholder="123-456-7890" pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$" required />
+                    <Form.Control type="tel" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
                   </Col>
                 </Row>
               </Form.Group>

@@ -28,7 +28,7 @@ function Navbar(props) {
   }, [props.isLoggedIn]);
 
   return (
-    <div className="MyNavbar">
+    <div className="MyNavbar pb-4">
       <BootNavbar bg="primary" variant="dark">
         <Container>
           <BootNavbar.Brand href="#">Logo</BootNavbar.Brand>
