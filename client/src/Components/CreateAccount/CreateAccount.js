@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Button} from 'react-bootstrap';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 
 function CreateAccount(props) {
@@ -21,18 +22,28 @@ function CreateAccount(props) {
   const renderErrorMessage = () => {
     let validPassErrorJSX = (
       <>
-        <div>Passwords don't meet criterion</div>
-        <ul>
-          <li>At least 10 Characters</li>
-          <li>One Number</li>
-          <li>One symbol from {`~\`!@#$%^&*()_-+={[}]|:;<,>.?`}</li>
-          <li>Password Must Match</li>
-        </ul>
+        <div className="pb-2">Passwords don't meet criterion</div>
+        <ListGroup 
+          style={{
+            textAlign: "left", 
+            width: "75%", 
+            display: "flex",
+            justifyContent: "center",
+          }} as="ol" numbered>
+            <ListGroup.Item variant="info">At least 10 characters</ListGroup.Item>
+            <ListGroup.Item variant="info">One number</ListGroup.Item>
+            <ListGroup.Item variant="info">One symbol from {`~\`!@#$%^&*()_-+={[}]|:;<,>.?`}</ListGroup.Item>
+            <ListGroup.Item variant="info">Passwords must match</ListGroup.Item>
+        </ListGroup>
       </>
     );
 
     let matchPassErrorJSX = (
       <>Passwords Must Match</>
+    );
+
+    let numberErrorJSX = (
+      <>Number must be in form of 123-456-7890</>
     );
 
     let errMsg; 
@@ -71,23 +82,15 @@ function CreateAccount(props) {
         }
     }
     return (number_used && symbol_used);
-}
-
+  }
 
   function handleSubmit(event){
     event.preventDefault();
     setPassMatchError(false);
     setValidPassError(false);
     var { email, fname, lname, number, pass1, pass2} = document.forms[0];
-    console.log(email.value);
-    console.log(fname.value);
-    console.log(lname.value);
-    console.log(number.value);
-    console.log(pass1.value);
-    console.log(pass2.value);
      
     if (pass1.value !== pass2.value){
-      console.log("HERE");
       setPassMatchError(true);
       return;
     }
@@ -130,7 +133,14 @@ function CreateAccount(props) {
 
     return (
       <div className="CreateAccount">
-        <div style={{ width: "50%" }} className="p-2 bg-light border">
+        <div 
+          style={{
+            width: "50%",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          className="p-2 bg-light border">
           <Container fluid>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="email">
@@ -169,7 +179,7 @@ function CreateAccount(props) {
                     <Form.Label>Phone Number</Form.Label>
                   </Col>
                   <Col>
-                    <Form.Control type="tel" placeholder="123-456-7890" required />
+                    <Form.Control type="tel" placeholder="123-456-7890" pattern="^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$" required />
                   </Col>
                 </Row>
               </Form.Group>
@@ -193,7 +203,7 @@ function CreateAccount(props) {
                   </Col>
                 </Row>
               </Form.Group>
-              <div>{renderErrorMessage()}</div>
+              <div className="pb-2" >{renderErrorMessage()}</div>
               <Button size="sm" variant="primary" type="Submit">
                 Create Account 
               </Button>
