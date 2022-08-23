@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col';
 import { Button} from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 
-
 function CreateAccount(props) {
   const navigate = useNavigate();
 
