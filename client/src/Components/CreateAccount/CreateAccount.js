@@ -92,11 +92,12 @@ function CreateAccount(props) {
       setValidPassError(true);
       return;
     }
+
     // SUBMIT DATA TO BACKEND HERE
     fetch("/createAccount",{
       method: "POST",
       body: JSON.stringify({
-        email: email,
+        email: email.value,
         "first-name": fname.value,
         "last-name": lname.value,
         "phone-number": number.value,

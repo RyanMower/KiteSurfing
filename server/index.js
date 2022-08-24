@@ -269,8 +269,8 @@ app.post("/updateAccount", function(req, res) {
     let fname = req.body["first-name"];
     let lname = req.body["last-name"];
     let phone_number = req.body["phone-number"];
-    let password1 = req.body["password1"];
-    let password2 = req.body["password2"];
+    let password1 = req.body["pass1"];
+    let password2 = req.body["pass2"];
     let updating = {
         "password": false,
         "fname"   : false,
@@ -280,12 +280,10 @@ app.post("/updateAccount", function(req, res) {
 
     // Makes sure both passwords have data, otherwise, don't update
     if (password1 && password2) {
-        if (scripts.isValidPassword(password1) && scripts.isValidPassword(password2) && (password1 == password2)) {
-            console.log("Updting password");
+        if (scripts.validateInput(password1, "password") && scripts.validateInput(password2, "password") && (password1 == password2)) {
             updating["password"] = true;
         }
     }
-
 
 
     // SQL Prevention
@@ -303,9 +301,8 @@ app.post("/updateAccount", function(req, res) {
     
     // Make sure email not attached to existing account
     connection.query('SELECT * FROM Users WHERE user_email=?;', [email], function(err, results, fields) {
-        if (err) {
-            throw err;
-        }
+        if (err) {throw err;}
+
         if (results.length == 1) {
             // Update Account Here
             let sql_update = "UPDATE Users SET ";
@@ -317,15 +314,39 @@ app.post("/updateAccount", function(req, res) {
             sql_update += "user_lname=?, ";
 
             // Update Phone Number 
-            sql_update += "user_phone=? ";
+            if (updating["password"]){ // Adds comma for proper sql syntax
+                sql_update += "user_phone=?, ";
+            }
+            else{
+                sql_update += "user_phone=? ";
+            }
+            
+            // Update Password
+            let passwordHash = "";
+            if (updating["password"]){
+                let salt_rounds = 10;
+                passwordHash = bcrypt.hashSync(password1, salt_rounds);
+                sql_update += "user_pass_hash=? ";
+            }
 
             // Update current user 
             sql_update += "WHERE user_email=?;";
             req.session.name = fname;
-            connection.query(sql_update, [fname, lname, phone_number, email], function(err, results, fields){
-                if (err) { throw err;}
-                res.json({status: 'success'});
-            });
+
+            if (updating["password"]){
+                connection.query(sql_update, [fname, lname, phone_number, passwordHash, email], function(err, results, fields){
+                    if (err) { throw err;}
+                    res.json({status: 'success'});
+                    return;
+                });
+            }
+            else{
+                connection.query(sql_update, [fname, lname, phone_number, email], function(err, results, fields){
+                    if (err) { throw err;}
+                    res.json({status: 'success'});
+                    return;
+                });
+            }
 
         } else { // Email already already used
             res.json({

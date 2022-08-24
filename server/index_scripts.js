@@ -37,7 +37,6 @@ module.exports = {
      
         var raw_data = fs.readFileSync("./configs/secrets.json");
         json_config = JSON.parse(raw_data);
-        console.log("Email: " + json_config["email"]["email"]);
         var mail = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -46,7 +45,6 @@ module.exports = {
             }
         });
         let html ='<p>You requested for reset password, kindly use this <a href="'+DOMAIN+':'+PORT+'/reset-password/' + token + '">link</a> to reset your password</p>';
-        console.log(html);
         var mailOptions = {
             from: 'kitesurft@gmail.com',
             to: email,
