@@ -8,6 +8,7 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import CreateAccount from '../CreateAccount/CreateAccount';
 import BecomeInstructor from '../BecomeInstructor/BecomeInstructor';
+import MyLessons from '../MyLessons/MyLessons';
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
 import ForgotPasswordUpdate from '../ForgotPassword/ForgotPasswordUpdate';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -30,6 +31,7 @@ function App() {
           <Route path="/create-account" exact element={<CreateAccount/>} />
           <Route path="/become-instructor" exact element={<BecomeInstructor/>} />
           <Route path="/forgot-password" exact element={<ForgotPassword/>} />
+          <Route path="/my-lessons" exact element={<MyLessons/>} />
           <Route exact path="/reset-password/:token" element={<ForgotPasswordUpdate/>} />
           <Route path="/profile" exact element={<Profile isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>} /> 
         </Routes>

@@ -186,44 +186,54 @@ function Profile(props) {
   }
   else{
     return (
-      <div className="Profile">
-        <Container>
-        <Row>
-          <Col>
-           Email 
-          </Col>
-          <Col>
-           {data["email"]}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            First Name 
-          </Col>
-          <Col>
-           {data["fname"]} 
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            Last Name 
-          </Col>
-          <Col>
-           {data["lname"]} 
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-           Phone Number 
-          </Col>
-          <Col>
-           {data["number"]} 
-          </Col>
-        </Row>
-      </Container>
-      <Button onClick={logout(props)}>Logout</Button>
-      <Button onClick={toggleProfileEditor}>Edit profile</Button>
-      </div> 
+      <div 
+        className="Profile"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ width: "50%" }} className="p-3 bg-light border">
+          <Container>
+          <Row>
+            <Col>
+             Email 
+            </Col>
+            <Col>
+             {data["email"]}
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              First Name 
+            </Col>
+            <Col>
+             {data["fname"]} 
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              Last Name 
+            </Col>
+            <Col>
+             {data["lname"]} 
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+             Phone Number 
+            </Col>
+            <Col>
+             {data["number"]} 
+            </Col>
+          </Row>
+        </Container>
+        <Button onClick={logout(props)}>Logout</Button> {' '}
+          <Button onClick={toggleProfileEditor}>Edit profile</Button> {' '}
+        <Button onClick={() => navigate("/my-lessons")}>My Lessons</Button>
+      </div>
+  </div> 
     );
   }
   
