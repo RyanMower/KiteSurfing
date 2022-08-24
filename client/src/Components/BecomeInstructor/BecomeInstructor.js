@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
-
 function BecomeInstructor(props) {
   const navigate = useNavigate();
 
@@ -52,9 +49,16 @@ function BecomeInstructor(props) {
 
 
     return (
-      <div className="BecomeInstructor">
+      <div 
+        className="BecomeInstructor"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         {loggedIn && 
-        <form onSubmit={handleSubmit}>
+        <form style={{ width: "70%" }} onSubmit={handleSubmit}>
           <div className="input-container bg-light border">
             <label>Contact Information</label>
             <input type="text" name="contactInfo" />
