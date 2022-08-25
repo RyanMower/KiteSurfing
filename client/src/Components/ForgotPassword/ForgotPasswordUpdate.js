@@ -10,19 +10,15 @@ function ForgotPasswordUpdate(props) {
   const navigate = useNavigate();
   const { token } = useParams();
 
-  const [data, setData] = useState({
-    password1: "",
-    password2: "",
-  });
-
   function handleSubmit(event){
     event.preventDefault();
+    var { pass1, pass2 } = document.forms[0];
     // SUBMIT DATA TO BACKEND HERE
     fetch("/update-password",{
       method: "POST",
       body: JSON.stringify({
-        "new-password1": data["password1"],
-        "new-password2": data["password1"],
+        "new-password1": pass1.value,
+        "new-password2": pass2.value,
         "token": token,
       }),
       headers: {"Content-Type": "application/json"},
@@ -40,39 +36,50 @@ function ForgotPasswordUpdate(props) {
       .catch(err => console.log(err));
 
   }
-
-  function handleChangePassword1(event) {
-     setData({
-     ...data,
-     password1: event.target.value
-   });
-  }
-
-  function handleChangePassword2(event) {
-     setData({
-     ...data,
-     password2: event.target.value
-   });
-  }
   return (
-    <div className="ForgotPasswordUpdate">
+    <>
       <h1>Reset Password</h1>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>
-            New Password:
-            <input type="password" value={data["password1"]} onChange={handleChangePassword1}/>
-            </label>
-          </div>
-          <div>
-            <label>
-            Re-type New Password:
-            <input type="password" value={data["password2"]} onChange={handleChangePassword2}/>
-            </label>
-          </div>
-          <input type="submit" value="Update Password" />
-        </form>
-    </div>
+      <div 
+        className="ForgotPasswordUpdate"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ width: "50%" }} className="p-3 bg-light border">
+          <Container fluid>
+            <Form className="text-center" onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="pass1">
+                <Row>
+                  <Col>
+                    <Form.Label>New Password</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="password" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="pass2">
+                <Row>
+                  <Col>
+                    <Form.Label>Re-type New Password</Form.Label>
+                  </Col>
+                  <Col>
+                    <Form.Control type="password" required />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Button size="sm" variant="primary" type="Submit">
+                Update Password 
+              </Button>
+            </Form> 
+          </Container>
+        </div>
+      </div>
+
+
+    </>
   );
 }
 
