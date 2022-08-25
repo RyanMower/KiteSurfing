@@ -149,7 +149,6 @@ app.get('/getMyLessons', function(req, res) {
 
         connection.query(sql, [req.session.email], function(err, rows, fields) {
             // Error Occured
-            console.log(req.session.email);
             if (err) { res.json({status: 'fail'});}
             else{
                 let json_resp = {

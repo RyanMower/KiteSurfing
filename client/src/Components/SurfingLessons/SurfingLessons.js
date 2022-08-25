@@ -89,8 +89,8 @@ function SurfingLessons() {
           </Col>
           <Col>
             {lessons.map((lesson, index) => (
-            <div className="pt-3">
-              <Card className="mx-auto" key={index}>
+            <div className="pt-3" key={index}>
+              <Card className="mx-auto">
                 <Card.Header className="bg-dark text-white">{lesson["fname"]} {lesson["lname"]}</Card.Header>
                 <Card.Body>
                   <Card.Title>{lesson["contact_info"]}</Card.Title>
@@ -112,6 +112,3 @@ function SurfingLessons() {
 }
 
 export default SurfingLessons;
-
-
-
